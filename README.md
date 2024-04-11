@@ -6,11 +6,11 @@
 <div align=center><h2>📚 Stacks</h2></div>
 
 <div align=center> 
-  <img src="https://img.shields.io/badge/unity-ffffff?style=for-the-badge&logo=unity&logoColor=black"> 
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
   <br>
   
-  <img src="https://img.shields.io/badge/c sharp-512bd4?style=for-the-badge&logo=csharp&logoColor=white">
-  <img src="https://img.shields.io/badge/visual studio-5c2d91?style=for-the-badge&logo=visualstudio&logoColor=white">
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+  <img src="https://img.shields.io/badge/visual studio code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
   <br>
   
   <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
@@ -29,10 +29,10 @@
 <div align=center>
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/SHSong99"><img src="https://avatars.githubusercontent.com/u/113815454?v=4" width="100px;" alt=""/>
-    <td align="center"><a href="https://github.com/sihyeon-an"><img src="https://avatars.githubusercontent.com/u/86926175?v=4" width="100px;" alt=""/>
-    <td align="center"><a href="https://github.com/Hun0906"><img src="https://avatars.githubusercontent.com/u/119721103?v=4" width="100px;" alt=""/>
-    <td align="center"><a href="https://github.com/dhlee777"><img src="https://avatars.githubusercontent.com/u/163558275?v=4" width="100px;" alt=""/>
+    <td align="center"><a href="https://github.com/SHSong99"><img src="https://avatars.githubusercontent.com/u/161740297?v=4" width="100px;" alt=""/>
+    <td align="center"><a href="https://github.com/sihyeon-an"><img src="https://avatars.githubusercontent.com/u/144617039?v=4" width="100px;" alt=""/>
+    <td align="center"><a href="https://github.com/Hun0906"><img src="https://avatars.githubusercontent.com/u/134472292?v=4" width="100px;" alt=""/>
+    <td align="center"><a href="https://github.com/dhlee777"><img src="https://avatars.githubusercontent.com/u/117627976?v=4" width="100px;" alt=""/>
   </tr>
     <tr>
     <td align="center"><a href="https://github.com/SHSong99" title="Code">SHSong99</a></td>
