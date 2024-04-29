@@ -2,7 +2,7 @@ package wap.dingdong.backend.security.oauth2.user;
 
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import wap.dingdong.backend.exception.OAuth2AuthenticationProcessingException;
-import wap.dingdong.backend.model.AuthProvider;
+import wap.dingdong.backend.domain.AuthProvider;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
