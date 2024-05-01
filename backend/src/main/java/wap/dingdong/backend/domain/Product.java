@@ -30,7 +30,7 @@ public class Product {
     private ProductStatus status;
 
     @Enumerated(EnumType.STRING)
-    private ProductLike Productlike;
+    private ProductLike productlike;
 
     @CreatedDate
     private LocalDateTime createdAt;
