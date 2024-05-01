@@ -7,7 +7,6 @@ header {
   justify-content: space-between; /* 요소들을 가로로 균등하게 배치 */
   align-items: center; /* 요소들을 수직 가운데 정렬 */
 }
-
 header .Logo {
   display: flex; /* Logo 내의 요소들을 가로로 나열하기 위해 Flexbox 적용 */
   align-items: center; /* 요소들을 수직 가운데 정렬 */
@@ -15,7 +14,11 @@ header .Logo {
   font-weight : bold;
   font-style : normal;
 }
-
+.header-size{
+margin-top:30px;
+margin-bottom:30px;
+margin-left:100px;
+}
 header .search-bar {
   flex-grow: 1; /* 검색 바를 나머지 공간을 모두 차지하도록 설정 */
   margin: 0 20px; /* 좌우 여백 추가 */
@@ -24,20 +27,6 @@ header .search-bar {
 header .location-selector,
 header .user-options {
   margin-left: 20px; /* 아이콘과 버튼 사이 여백 추가 */
-}
-
-navigator {
-  display : flex;
-  align-items: center;
-  justify-content: space-between;
-}
-navigator .nav{
-  margin-right : 20px;
-  margin-left : 20px;
-}
-
-productList {
-  display : grid;
 }
 
 /* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조절 */
@@ -60,4 +49,3 @@ productList {
     margin-left: 0; /* 아이콘과 버튼 여백 제거 */
   }
 }
-
