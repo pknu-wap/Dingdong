@@ -36,6 +36,10 @@ navigator .nav{
   margin-left : 20px;
 }
 
+productList {
+  display : grid;
+}
+
 /* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조절 */
 @media (max-width: 768px) {
   /* 화면 너비가 768px 이하일 때 적용되는 스타일 */

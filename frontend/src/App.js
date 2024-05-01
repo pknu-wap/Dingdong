@@ -10,7 +10,7 @@ const App = () => {
         <div className="app">
             <Header />
             <Nav />
-            <ProductList />
+            <Product />
         </div>
     );
 };
