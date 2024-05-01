@@ -16,21 +16,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Comment {
+public class Wish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "wish_id")
     private Long id;
-
-    private String contents;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @OneToOne(mappedBy = "wish", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Product product;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buy_id")
+    private Buy buy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
