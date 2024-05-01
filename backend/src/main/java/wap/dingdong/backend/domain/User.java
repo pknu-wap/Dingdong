@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -46,6 +46,18 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Wish> wishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Sell> sells = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Buy> buys = new ArrayList<>();
 
 
 }
