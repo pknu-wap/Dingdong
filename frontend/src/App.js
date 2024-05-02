@@ -1,5 +1,6 @@
 import React from 'react';
 import {useState} from "react"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Header from './Header';
 import ProductList from'./ProductList';
