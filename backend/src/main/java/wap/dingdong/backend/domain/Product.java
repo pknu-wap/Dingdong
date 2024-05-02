@@ -30,7 +30,7 @@ public class Product {
     private ProductStatus status = ProductStatus.ON_SALE; //기본값 ON_SALE
 
     @Enumerated(EnumType.STRING)
-    private ProductLike Productlike = ProductLike.UNLIKE; //기본값 UNLIKE
+    private ProductLike productLike = ProductLike.UNLIKE; //기본값 UNLIKE
 
     @CreatedDate
     private LocalDateTime createdAt;
