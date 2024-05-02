@@ -39,16 +39,13 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buy_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Buy buy;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sell_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Sell sell;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wish_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Wish wish;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)

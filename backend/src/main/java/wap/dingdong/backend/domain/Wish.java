@@ -26,7 +26,8 @@ public class Wish {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "wish", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @OneToOne(fetch = FetchType.LAZY)
