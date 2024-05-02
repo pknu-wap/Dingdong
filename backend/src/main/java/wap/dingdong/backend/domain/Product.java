@@ -1,10 +1,7 @@
 package wap.dingdong.backend.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,6 +13,7 @@ import java.util.List;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Builder
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,4 +58,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    public void update(String title, String contents){
+        this.title = title;
+        this.contents = contents;
+    }
 }
