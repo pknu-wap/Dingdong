@@ -2,18 +2,20 @@ import React from 'react';
 import {useState} from "react"
 import './App.css';
 import Header from './Header';
-import Productlist from'./ProductList';
+import ProductList from'./ProductList';
 import Mypage from'./Mypage';
 import Productreg from'./Productreg';
 import { Route, Routes,useNavigate } from "react-router-dom"; 
+
 function App() {
   return (
     <div className="App">
      <Header/>
      <Routes>
-     <Route path="/productlist" element={<Productlist/> } />
-     <Route path="/productreg" element={<Productreg/>}/>
-     <Route path="/mypage" element={<Mypage/> } />
+     <Route path="/" element={<ProductList/> } />
+     <Route path="/ProductList" element={<ProductList/> } />
+     <Route path="/Productreg" element={<Productreg/>}/>
+     <Route path="/Mypage" element={<Mypage/> } />
      </Routes>
     </div>
   );

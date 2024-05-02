@@ -10,6 +10,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
+    "react-grid-layout": "^1.4.4",
     "react-infinite-scroller": "^1.2.6",
     "react-router-dom": "^6.23.0",
     "react-scripts": "^5.0.1",
