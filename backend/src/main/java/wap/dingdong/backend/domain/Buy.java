@@ -22,7 +22,8 @@ public class Buy {
     @Column(name = "buy_id")
     private Long id;
 
-    @OneToOne(mappedBy = "buy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @OneToOne(mappedBy = "buy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

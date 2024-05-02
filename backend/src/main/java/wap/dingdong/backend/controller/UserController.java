@@ -15,8 +15,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/user/me") //@CurrentUser : 
-    //프론트에서 주는 토큰을 가지고 객체를 만들어줌
+    @GetMapping("/user/me") //@CurrentUser : 프론트에서 주는 토큰을 가지고 객체를 만들어줌
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
 
         return userRepository.findById(userPrincipal.getId())

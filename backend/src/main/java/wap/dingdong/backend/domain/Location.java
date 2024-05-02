@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -21,8 +18,12 @@ public class Location {
     @Column(name = "location_id")
     private Long id;
 
-    private String name;
+    private String location;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-    private List<ProductLocation> productLocations = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+
+
 }
