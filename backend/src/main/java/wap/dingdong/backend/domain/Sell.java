@@ -28,8 +28,7 @@ public class Sell {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @OneToOne(mappedBy = "sell", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
