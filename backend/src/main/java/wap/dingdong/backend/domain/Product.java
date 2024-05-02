@@ -27,10 +27,10 @@ public class Product {
     private String contents;
 
     @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    private ProductStatus status = ProductStatus.ON_SALE; //기본값 ON_SALE
 
     @Enumerated(EnumType.STRING)
-    private ProductLike Productlike;
+    private ProductLike Productlike = ProductLike.UNLIKE; //기본값 UNLIKE
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -39,23 +39,20 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buy_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Buy buy;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sell_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Sell sell;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wish_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Wish wish;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductLocation> productLocations = new ArrayList<>();
+    private List<Location> locations = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
