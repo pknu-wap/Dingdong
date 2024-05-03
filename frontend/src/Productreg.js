@@ -28,7 +28,9 @@ const OPTIONS = [
   {value:15,label:"해운대구"}
 ]
 function Productreg(){
-  let [user_username, setUser_username] = useState("");
+  let [productname, set_productname] = useState("");
+  let [productdetail, set_productdetail] = useState("");
+  let [price, set_price] = useState("");
     return(
       <>
         <div style={{ fontSize: '25px' ,fontWeight:'bold', borderBottom: '1px solid #000',marginLeft:'30px',marginTop:'30px'}}>판매하기</div>
@@ -47,8 +49,8 @@ function Productreg(){
           상품명
         </Form.Label>
         <Col>
-        <Form.Control type="text" placeholder="상품명을 입력하세요" value={user_username} onChange={(e)=>{e.preventDefault();
-        setUser_username(e.target.value);}}/>
+        <Form.Control type="text" placeholder="상품명을 입력하세요" value={productname} onChange={(e)=>{e.preventDefault();
+        set_productname(e.target.value);}}/>
         </Col>
       </Row>
       <br />
@@ -57,7 +59,8 @@ function Productreg(){
          상세설명
         </Form.Label>
         <Col>
-          <Form.Control type="text" placeholder="상품 설명을 적어주세요" />
+          <Form.Control type="text" placeholder="상품 설명을 적어주세요" value={productdetail} onChange={(e)=>{e.preventDefault();
+       set_productdetail(e.target.value);}}  />
         </Col>
       </Row>
       <br />
@@ -66,7 +69,8 @@ function Productreg(){
           가격
         </Form.Label>
         <Col>
-          <Form.Control type="text" placeholder="가격을 입력하세요      (원)" />
+          <Form.Control type="text" placeholder="가격을 입력하세요      (원)" value={price} onChange={(e)=>{e.preventDefault();
+       set_price(e.target.value);}}/>
         </Col>
       </Row>
       <br />
