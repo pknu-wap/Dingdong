@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import wap.dingdong.backend.model.User;
+import wap.dingdong.backend.domain.User;
 
 import java.util.Collection;
 import java.util.Collections;

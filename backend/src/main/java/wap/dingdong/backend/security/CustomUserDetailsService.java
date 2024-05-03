@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wap.dingdong.backend.exception.ResourceNotFoundException;
-import wap.dingdong.backend.model.User;
+import wap.dingdong.backend.domain.User;
 import wap.dingdong.backend.repository.UserRepository;
 
 /**
