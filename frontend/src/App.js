@@ -37,6 +37,7 @@ function App() {
   return (
     <div className="App">
      <Header/>
+     <h1 className="App-title">{message}</h1>
      <Routes>
      <Route path="/" element={<ProductList/> } />
      <Route path="/productlist" element={<ProductList/> } />
