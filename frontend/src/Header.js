@@ -1,19 +1,27 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Route, Routes,useNavigate } from "react-router-dom"; 
+import { Route, Routes,useNavigate } from "react-router-dom";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const Header = () => {
+  const [showModal, setShowModal] = useState(false); // 모달 상태를 관리하기 위한 상태값
+
+  const handleMapIconClick = () => {
+    setShowModal(true); // 모달 열기
+  };
+
   let navigate=useNavigate();
     return (
         <div>
             <Container fluid className='header-size'>
              <Row>
         <Col className='col-3'>
-        <img src = "dingdong로고.png" style={{width : '40px', height: 'auto',marginBottom:'10px'}}/>
+        <img src = "dingdong로고.png" alt = "logo"style={{width : '40px', height: 'auto',marginBottom:'10px'}}/>
         <span style={{ fontSize: '30px' ,fontWeight:'bold',textAlign:'center'}}>딩동</span>
         </Col>
 
@@ -26,7 +34,7 @@ const Header = () => {
         </Col>
 
         <Col className='col-2'>
-        <img src="지도로고.png" alt="지도 아이콘" style={{width:'40px',height:'auto',marginBottom:'20px',marginLeft:'10px'}}/>
+        <img src="지도로고.png" alt="지도 아이콘" style={{width:'40px',height:'auto',marginBottom:'20px',marginLeft:'10px'}} onClick={handleMapIconClick}/>
         </Col>
         
         <Col className='col-3'>
@@ -45,8 +53,24 @@ const Header = () => {
        
       </Container>
     </Navbar>
+    <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>지역 선택</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* 지역 선택 내용을 추가 */}
+          <p>지역을 선택하세요.</p>
+          {/* 지역 선택 UI 추가 */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            닫기
+          </Button>
+          {/* 선택 완료 버튼 등을 추가할 수 있음 */}
+        </Modal.Footer>
+      </Modal>
             
-            </div>
+      </div>
     );
 };
 
