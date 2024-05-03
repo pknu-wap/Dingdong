@@ -10,7 +10,7 @@ import java.util.List;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductsResponse {
+public class ProductsResponse{
 
     private List<ProductInfoResponse> productsResponse;
 
