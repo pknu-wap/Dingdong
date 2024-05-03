@@ -6,8 +6,40 @@ import ProductList from'./ProductList';
 import Mypage from'./Mypage';
 import Productreg from'./Productreg';
 import { Route, Routes,useNavigate } from "react-router-dom"; 
+import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import './App.css';
+import axios from 'axios';
+
 function App() {
+
+  // message 초기값을 ""으로 설정.
+  const [message, setMessage] = useState("");
+
+  // // useEffect(함수,배열) : 컴포넌트가 화면에 나타났을(마운트)때 자동 실행.
+  // useEffect( () => {
+     
+  //       // fetch(url,options) : HTTP 요청 함수
+  //       fetch('/demo/hello')
+  //       .then(response => response.text())
+  //       .then(message => {
+  //       setMessage(message);
+  //       });
+  //       },[])
+
+  useEffect(() => {
+    // axios.get(url, config)를 사용하여 GET 요청을 보냅니다.
+    axios.get('/demo/hello')
+      .then(response => {
+        setMessage(response.data); // 응답 데이터는 response.data에 있습니다.
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+        
   return (
+<<<<<<< HEAD
     <div className="App">
      <Header/>
      <Routes>
@@ -18,6 +50,19 @@ function App() {
      </Routes>
     </div>
   );
+=======
+  <div className="App">
+    <header className="App-header">
+      <img src={logo} className="App-logo" alt="logo"/>
+       <h1 className="App-title">{message}</h1>
+    </header>
+    <p className="App-intro">
+      To get started, edit <code>src/App.js</code> and save to reload.
+    </p>
+  </div>
+  )
+
+>>>>>>> chore/#32-스프링_리액트_연동
 }
 
 export default App;
