@@ -39,7 +39,6 @@ function App() {
   }, []);
         
   return (
-<<<<<<< HEAD
     <div className="App">
      <Header/>
      <Routes>
@@ -50,19 +49,6 @@ function App() {
      </Routes>
     </div>
   );
-=======
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo"/>
-       <h1 className="App-title">{message}</h1>
-    </header>
-    <p className="App-intro">
-      To get started, edit <code>src/App.js</code> and save to reload.
-    </p>
-  </div>
-  )
-
->>>>>>> chore/#32-스프링_리액트_연동
 }
 
 export default App;
