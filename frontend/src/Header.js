@@ -7,6 +7,8 @@ import Col from 'react-bootstrap/Col';
 import { Route, Routes,useNavigate } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Logo from './dummy/dingdong로고.png';
+import mapIcon from './dummy/지도로고.png';
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태를 관리하기 위한 상태값
@@ -21,7 +23,7 @@ const Header = () => {
             <Container fluid className='header-size'>
              <Row>
         <Col className='col-3'>
-        <img src = "dingdong로고.png" alt = "logo"style={{width : '40px', height: 'auto',marginBottom:'10px'}}/>
+        <img src = {Logo} alt = "logo"style={{width : '40px', height: 'auto',marginBottom:'10px'}}/>
         <span style={{ fontSize: '30px' ,fontWeight:'bold',textAlign:'center'}}>딩동</span>
         </Col>
 
@@ -34,7 +36,7 @@ const Header = () => {
         </Col>
 
         <Col className='col-2'>
-        <img src="지도로고.png" alt="지도 아이콘" style={{width:'40px',height:'auto',marginBottom:'20px',marginLeft:'10px'}} onClick={handleMapIconClick}/>
+        <img src= {mapIcon} alt="지도 아이콘" style={{width:'40px',height:'auto',marginBottom:'20px',marginLeft:'10px'}} onClick={handleMapIconClick}/>
         </Col>
         
         <Col className='col-3'>
