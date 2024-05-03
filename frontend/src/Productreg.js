@@ -7,6 +7,7 @@ import Image from 'react-bootstrap/Image';
 import React from "react";
 import {useState} from "react";
 import {Select }from 'react-select';
+import axios from 'axios';
 
 const OPTIONS = [
   {value:0, label:"강서구"},
@@ -26,7 +27,6 @@ const OPTIONS = [
   {value:14,label:"중구"},
   {value:15,label:"해운대구"}
 ]
-
 function Productreg(){
   let [user_username, setUser_username] = useState("");
     return(
@@ -82,7 +82,10 @@ function Productreg(){
       </Container>
       <div style={{borderTop: '1px solid #000',marginLeft:'30px',marginTop:'20px'}}></div>
       <br /><br />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style={{marginLeft:'1300px'}}>판매하기</button>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style={{marginLeft:'1300px'}}
+      onClick={()=>{
+        axios.post('url',{})
+      }}>판매하기</button>
       </>
     );
 }
@@ -114,7 +117,6 @@ function Selectregion(){
 
 const ImageUpload = ()=> {
   const [uploadImgUrl, setUploadImgUrl] = useState("");
-
   const onchangeImageUpload = (e)=> {
      const {files} = e.target;
      const uploadFile = files[0];
@@ -129,5 +131,4 @@ const ImageUpload = ()=> {
     <input type = "file" accept = "image/*" onChange = {onchangeImageUpload}/>
     </>
 }
-
 export default Productreg;
