@@ -1,3 +1,4 @@
+
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -5,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image';
 import React from "react";
 import {useState} from "react";
+
 import axios from 'axios';
 
 const OPTIONS = [
@@ -129,7 +131,7 @@ const ImageUpload = ()=> {
   }
 }
   return <>
-    <img src = {uploadImgUrl} alt = '업로드이미지' img = "img" style={{maxHeight:'100px',maxWidth:'auto'}}/>
+    <img src = {uploadImgUrl} img = "img" style={{maxHeight:'100px',maxWidth:'auto'}}/>
     <input type = "file" accept = "image/*" onChange = {onchangeImageUpload}/>
     </>
 }
