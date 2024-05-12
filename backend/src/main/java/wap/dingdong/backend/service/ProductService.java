@@ -9,10 +9,10 @@ import wap.dingdong.backend.domain.Location;
 import wap.dingdong.backend.domain.Product;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
+import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.repository.ProductRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +20,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-/*
-    상품 등록
- */
+    /*
+        상품 등록
+     */
     @Transactional
     public void save(ProductCreateRequest request) {
         // 도메인객체를 생성 후 요청 DTO를 이용하여 상품 엔티티 생성
@@ -59,6 +59,7 @@ public class ProductService {
 
 /*
     모든 상품 조회 (메인페이지 상품 목록)
+    응답을 리스트로 해야하므로 responseDTO 가 2개 (상세 DTO, 상세 DTO 리스트)
  */
 
 //ProductInfoResponse는 하나의 개별 상품의 정보를 담는 DTO (상품상세 DTO와 비슷)
@@ -67,35 +68,9 @@ public class ProductService {
 
     public List<ProductInfoResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return ProductMapper.toProductInfoResponseList(products);
+        return ProductsResponse.of(products);
     }
 
-    public static class ProductMapper {
 
-        public static ProductInfoResponse toProductInfoResponse(Product product) {
-            ProductInfoResponse response = new ProductInfoResponse();
-            response.setProductId(product.getId());
-            response.setTitle(product.getTitle());
-            response.setPrice(product.getPrice());
-            response.setContents(product.getContents());
-            response.setLocations(product.getLocations().stream()
-                    .map(Location::getLocation)
-                    .collect(Collectors.toList()));
-            response.setImages(product.getImages().stream()
-                    .map(Image::getImageUrl)
-                    .collect(Collectors.toList()));
-            response.setProductLike(product.getProductLike().name());
-            response.setCreatedAt(product.getCreatedAt().toString()); // 형식에 맞게 수정 필요
-            return response;
-        }
 
-        public static List<ProductInfoResponse> toProductInfoResponseList(List<Product> products) {
-            return products.stream()
-                    .map(ProductMapper::toProductInfoResponse)
-                    .collect(Collectors.toList());
-        }
-
-//======================================================================================================
-
-    }
 }
