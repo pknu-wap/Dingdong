@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentRequest {
     private String cmtContent;
-//    private String userName;
+    // 유저 이름
+    //    private String userName;
 
     // Dto -> Entity
     public Comment toEntity() {
