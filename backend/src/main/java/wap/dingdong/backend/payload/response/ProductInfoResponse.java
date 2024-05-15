@@ -27,7 +27,7 @@ public class ProductInfoResponse {
 
     public static ProductInfoResponse of(Product product) {
         return new ProductInfoResponse(
-                product.getId(),
+                product.getProductId(),
                 product.getTitle(),
                 product.getPrice(),
                 product.getContents(),
