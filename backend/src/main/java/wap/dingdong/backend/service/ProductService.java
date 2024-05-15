@@ -2,14 +2,20 @@ package wap.dingdong.backend.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wap.dingdong.backend.domain.Comment;
 import wap.dingdong.backend.domain.Image;
 import wap.dingdong.backend.domain.Location;
 import wap.dingdong.backend.domain.Product;
+import wap.dingdong.backend.exception.ResourceNotFoundException;
+import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
+import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
+import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
 
 import java.util.List;
@@ -19,6 +25,9 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     /*
         상품 등록
@@ -71,6 +80,19 @@ public class ProductService {
         return ProductsResponse.of(products);
     }
 
+    /* ------------- 댓글 -------------- */
 
+    // 댓글 작성
+    public CommentResponse createComment(Long productId, CommentRequest commentDto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+
+        Comment comment = commentDto.toEntity();
+        comment.setProduct(product);
+
+        Comment savedComment = commentRepository.save(comment);
+        CommentResponse responseDto = new CommentResponse(savedComment);
+        return responseDto;
+    }
 
 }
