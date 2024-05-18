@@ -1,146 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
 
-import dummyMouse from './dummy/dummy_mouse.png';
-import dummyShoes from './dummy/dummy_shoes.png';
-import dummyPrinter from './dummy/dummy_printer.png';
-import dummyPhone from './dummy/dummy_phone.png';
-import dummypan from './dummy/dummy_pan.png';
-import dummyCamera from './dummy/dummy_camera.png';
-import dummyVaccum from './dummy/dummy_vaccum.png';
-import dummyBottle from './dummy/dummy_bottle.png';
-import dummyKeyboard from './dummy/dummy_keyboard.png';
-import dummyHeadphone from './dummy/dummy_headphone.png';
-// 더미 제품 데이터
-
-const product =[
-    {
-        id : 1,
-        image : dummyMouse,
-        name : '마우스',
-        price : 5000,
-        location : '해운대구',
-        seller : '이동현',
-        time : '방금 전',
-    },
-    {
-        id : 2,
-        image : dummyShoes,
-        name : '스니커즈',
-        price : 15000,
-        location : '수영구',
-        seller : '이동훈',
-        time : '10분 전',
-    },
-    {
-        id : 3,
-        image : dummyPrinter,
-        name : '프린터',
-        price : 20000,
-        location : '금정구',
-        seller : '송성현',
-        time : '1시간 전',
-    },
-    {
-        id : 4,
-        image : dummyPhone,
-        name : '사과폰',
-        price : 80000,
-        location : '남구',
-        seller : '안시현',
-        time : '2시간 전',
-    },
-    {
-        id : 5,
-        image : dummypan,
-        name : '후라이팬',
-        price : 8000,
-        location : '사하구',
-        seller : '홍길동',
-        time : '4시간 전',
-    },
-    {
-        id : 6,
-        image : dummyCamera,
-        name : '카메라',
-        price : 30000,
-        location : '영도구',
-        seller : '김철수',
-        time : '8시간 전',
-    },
-    {
-        id : 7,
-        image : dummyVaccum,
-        name : '다0ㅣ슨 청소기',
-        price : 100000,
-        location : '사상구',
-        seller : '김영희',
-        time : '13시간 전',
-    },
-    {
-        id : 8,
-        image : dummyBottle,
-        name : '텀블러',
-        price : 20000,
-        location : '남구',
-        seller : '김민수',
-        time : '1일 전',
-    },
-    {
-        id : 9,
-        image : dummyKeyboard,
-        name : '키보드',
-        price : 8000,
-        location : '중구',
-        seller : '홍길순',
-        time : '3일 전',
-    },
-    {
-        id : 10,
-        image : dummyHeadphone,
-        name : '헤드셋',
-        price : 13000,
-        location : '연재구',
-        seller : '정철민',
-        time : '4일 전',
-    },
-];
 // 제품 컴포넌트
 const Product = ({ product }) => {
     return (
       <div className="product">
-        <img src= {product.image} alt={product.name} />
+        <img src= {product.images[0]} alt={product.title} />
         <div className="info">
-          <h3>{product.name}</h3>
+          <h3>{product.title}</h3>
           <p>{product.price}원</p>
-          <p>{product.location}</p>
-          <p>{product.seller} - {product.time}</p>
+          <p>{product.locations.join(', ')}</p>
+          <p>{product.createdAt}</p>
         </div>
       </div>
     );
-  };
+};
   
-  // 그리드 레이아웃 컴포넌트
-  const ProductList = () => {
+// 그리드 레이아웃 컴포넌트
+const ProductList = () => {
+    const [product, setProduct] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('/product/list');
+                setProduct(response.data.productsResponse);
+                setLoading(false);
+            } catch (error) {
+                setError('상품을 불러오는 중 오류가 발생했습니다.');
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     // 그리드 레이아웃 설정
     const layout = product.map((product, index) => ({
-      i: `${product.id}`, // 고유한 ID로 사용
-      x: index % 4, // 열 위치 계산 (한 줄에 4개씩)
-      y: Math.floor(index / 4), // 행 위치 계산
-      w: 1, // 너비 (1 열)
-      h: 1, // 높이 (1 행)
+        i: `${product.productId}`, // 고유한 ID로 사용
+        x: index % 4, // 열 위치 계산 (한 줄에 4개씩)
+        y: Math.floor(index / 4), // 행 위치 계산
+        w: 1, // 너비 (1 열)
+        h: 1, // 높이 (1 행)
     }));
-  
+
     return (
-      <ReactGridLayout className="grid-layout" layout={layout} cols={4} rowHeight={500} width={1400} >
-        {product.map((product) => (
-          <div key={product.id} style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px'}}>
-            <Product product={product} />
-          </div>
-        ))}
-      </ReactGridLayout>
+        <ReactGridLayout className="grid-layout" layout={layout} cols={4} rowHeight={500} width={1400} >
+            {product.map((product) => (
+                <div key={product.productId} style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px'}}>
+                    <Product product={product} />
+                </div>
+            ))}
+        </ReactGridLayout>
     );
-  };
+};
   
-  export default ProductList;
+export default ProductList;
