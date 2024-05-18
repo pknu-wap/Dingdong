@@ -16,6 +16,7 @@ public class CommentResponse {
 //    private String userName;
     private Long productId;
 
+    // Entity -> Dto
     public CommentResponse(Comment comment) {
         this.cmtId = comment.getCmtId();
         this.cmtContent = comment.getCmtContent();
