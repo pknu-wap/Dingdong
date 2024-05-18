@@ -18,6 +18,7 @@ import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -93,6 +94,20 @@ public class ProductService {
         Comment savedComment = commentRepository.save(comment);
         CommentResponse responseDto = new CommentResponse(savedComment);
         return responseDto;
+    }
+
+    // 댓글 조회
+    public List<CommentResponse> getAllCommentsForBoard(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+
+        List<CommentResponse> responseDtoList = new ArrayList<>();
+        for (Comment comment : product.getComments()) {
+            CommentResponse responseDto = new CommentResponse(comment);
+            responseDtoList.add(responseDto);
+        }
+
+        return responseDtoList;
     }
 
 }
