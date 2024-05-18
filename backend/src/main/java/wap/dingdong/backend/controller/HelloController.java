@@ -9,6 +9,6 @@ public class HelloController {
 
     @GetMapping("/demo/hello")
     public String HelloWorld(){
-        return "Hello World!! \n";
+        return "스프링 리액트 연동 테스트 \n";
     }
 }
