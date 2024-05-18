@@ -15,6 +15,7 @@ public class CommentResponse {
     private Timestamp cmtRegDate = Timestamp.valueOf(LocalDateTime.now());
 //    private String userName;
     private Long productId;
+    private String title; // 상품 이름
 
     // Entity -> Dto
     public CommentResponse(Comment comment) {
@@ -22,5 +23,6 @@ public class CommentResponse {
         this.cmtContent = comment.getCmtContent();
         this.cmtRegDate = comment.getCmtRegDate();
         this.productId = comment.getProduct().getProductId();
+        this.title = comment.getProduct().getTitle();
     }
 }
