@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @AllArgsConstructor @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
@@ -57,4 +57,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+
+    public Product(User user, String title, Long price, String contents, List<Location> locations, List<Image> images) {
+        this.user = user;
+        this.title = title;
+        this.price = price;
+        this.contents = contents;
+        this.images = images;
+        this.locations = locations;
+    }
 }

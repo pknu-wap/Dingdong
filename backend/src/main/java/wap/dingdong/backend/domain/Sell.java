@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EnableJpaAuditing
 @EntityListeners(AuditingEntityListener.class)
 public class Sell {
 

@@ -9,7 +9,7 @@ import wap.dingdong.backend.domain.Product;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductsResponse{
@@ -24,5 +24,3 @@ public class ProductsResponse{
     }
 
 }
-
-

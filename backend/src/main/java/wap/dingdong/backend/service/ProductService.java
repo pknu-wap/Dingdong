@@ -2,56 +2,60 @@ package wap.dingdong.backend.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import wap.dingdong.backend.domain.Image;
-import wap.dingdong.backend.domain.Location;
-import wap.dingdong.backend.domain.Product;
+import wap.dingdong.backend.domain.*;
+import wap.dingdong.backend.exception.ResourceNotFoundException;
+import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
+import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
+import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
+import wap.dingdong.backend.repository.UserRepository;
+import wap.dingdong.backend.security.UserPrincipal;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     /*
-        상품 등록
-     */
+      상품 등록
+   */
     @Transactional
-    public void save(ProductCreateRequest request) {
-        // 도메인객체를 생성 후 요청 DTO를 이용하여 상품 엔티티 생성
-        Product product = new Product();
+    public void save(UserPrincipal userPrincipal, ProductCreateRequest request) {
 
-        product.setTitle(request.getTitle());
-        product.setPrice(request.getPrice());
-        product.setContents(request.getContents());
+        //요청토큰에 해당하는 user 를 꺼내옴
+        User user = userRepository.findById(userPrincipal.getId()).get();
 
-        // ProductLocationDTO와 ImageDTO는 별도의 DTO 객체이므로 각각의 필드 값을 가져와서 새로운 List에 복사해야함
-        // 새로운 List를 생성하여 값을 복사하는 방식으로
+        //locationDto 를 location 엔티티객체로 변환 (DB 사용을 위해)
+        List<Location> locations = request.getLocations().stream()
+                .map(locationDto -> new Location(locationDto.getLocation()))
+                .collect(Collectors.toList());
 
-        // 지역 정보 추가
-        for (String location : request.getLocations()) {
-            Location loc = new Location();
-            loc.setLocation(location);
-            loc.setProduct(product);
-            product.getLocations().add(loc);
-        }
+        List<Image> images = request.getImages().stream()
+                .map(imageDto -> new Image(imageDto.getImage()))
+                .collect(Collectors.toList());
 
-        // 이미지 정보 추가
-        for (String imageUrl : request.getImages()) {
-            Image image = new Image();
-            image.setImageUrl(imageUrl);
-            image.setProduct(product);
-            product.getImages().add(image);
-        }
+        Product product = new Product(user, request.getTitle(), request.getPrice(),
+                request.getContents(), locations, images);
 
-        // 상품 저장
+        // 양방향 연관관계 데이터 일관성 유지
+        locations.forEach(location -> location.updateProduct(product));
+        images.forEach(image -> image.updateProduct(product));
+
         productRepository.save(product);
     }
 
@@ -59,18 +63,41 @@ public class ProductService {
 
 /*
     모든 상품 조회 (메인페이지 상품 목록)
-    응답을 리스트로 해야하므로 responseDTO 가 2개 (상세 DTO, 상세 DTO 리스트)
  */
-
-//ProductInfoResponse는 하나의 개별 상품의 정보를 담는 DTO (상품상세 DTO와 비슷)
-//ProductsResponse는 전체 상품 목록을 담는 DTO,
-// 여러 개의 ProductInfoResponse 객체를 리스트 형태로 가짐
 
     public List<ProductInfoResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return ProductsResponse.of(products);
+        return ProductsResponse.of(products); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
 
+    /* ------------- 댓글 -------------- */
+
+    // 댓글 작성
+    public CommentResponse createComment(Long productId, CommentRequest commentDto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+
+        Comment comment = commentDto.toEntity();
+        comment.setProduct(product);
+
+        Comment savedComment = commentRepository.save(comment);
+        CommentResponse responseDto = new CommentResponse(savedComment);
+        return responseDto;
+    }
+
+    // 댓글 조회
+    public List<CommentResponse> getAllCommentsForBoard(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+
+        List<CommentResponse> responseDtoList = new ArrayList<>();
+        for (Comment comment : product.getComments()) {
+            CommentResponse responseDto = new CommentResponse(comment);
+            responseDtoList.add(responseDto);
+        }
+
+        return responseDtoList;
+    }
 
 }

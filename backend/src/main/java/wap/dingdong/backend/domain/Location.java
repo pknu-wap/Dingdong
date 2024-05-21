@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Location {
@@ -24,6 +23,12 @@ public class Location {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    public void updateProduct(Product product) {
+        this.product = product;
+    }
 
+    public Location(String location) {
+        this.location = location;
+    }
 
 }

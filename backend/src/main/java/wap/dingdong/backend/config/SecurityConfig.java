@@ -90,7 +90,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .requestMatchers( //로그인 검증 모두 해제 ("/**")
+                .requestMatchers(
+                        "/",
                         "/error",
                         "/favicon.ico",
                         "/**.png",
@@ -99,7 +100,7 @@ public class SecurityConfig {
                         "/**.jpg",
                         "/**.html",
                         "/**.css",
-                        "/**.js", "/**")
+                        "/**.js")
                 .permitAll()
                 .requestMatchers("/auth/**", "/oauth2/**")
                 .permitAll()
