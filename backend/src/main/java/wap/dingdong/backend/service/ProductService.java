@@ -20,6 +20,7 @@ import wap.dingdong.backend.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,33 +36,22 @@ public class ProductService {
      */
     @Transactional
     public void save(ProductCreateRequest request) {
-        // 도메인객체를 생성 후 요청 DTO를 이용하여 상품 엔티티 생성
-        Product product = new Product();
+        List<Location> locations = request.getLocations().stream()
+                .map(locationDto -> new Location(locationDto.getLocation()))
+                .collect(Collectors.toList());
 
-        product.setTitle(request.getTitle());
-        product.setPrice(request.getPrice());
-        product.setContents(request.getContents());
+        List<Image> images = request.getImages().stream()
+                .map(imageDto -> new Image(imageDto.getImage()))
+                .collect(Collectors.toList());
 
-        // ProductLocationDTO와 ImageDTO는 별도의 DTO 객체이므로 각각의 필드 값을 가져와서 새로운 List에 복사해야함
-        // 새로운 List를 생성하여 값을 복사하는 방식으로
 
-        // 지역 정보 추가
-        for (String location : request.getLocations()) {
-            Location loc = new Location();
-            loc.setLocation(location);
-            loc.setProduct(product);
-            product.getLocations().add(loc);
-        }
+        Product product = new Product(request.getTitle(), request.getPrice(),
+                request.getContents(), locations, images);
 
-        // 이미지 정보 추가
-        for (String imageUrl : request.getImages()) {
-            Image image = new Image();
-            image.setImageUrl(imageUrl);
-            image.setProduct(product);
-            product.getImages().add(image);
-        }
+        // 양방향 연관관계 데이터 일관성 유지
+        locations.forEach(location -> location.updateProduct(product));
+        images.forEach(image -> image.updateProduct(product));
 
-        // 상품 저장
         productRepository.save(product);
     }
 

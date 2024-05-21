@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import wap.dingdong.backend.domain.Image;
-import wap.dingdong.backend.domain.Location;
 import wap.dingdong.backend.domain.Product;
+import wap.dingdong.backend.payload.ImageDto;
+import wap.dingdong.backend.payload.LocationDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,8 +20,8 @@ public class ProductInfoResponse {
     private String title;
     private Long price;
     private String contents;
-    private List<String> locations;
-    private List<String> images;
+    private List<LocationDto> locations;
+    private List<ImageDto> images;
     private String productLike;
     private String createdAt;
 
@@ -32,10 +32,10 @@ public class ProductInfoResponse {
                 product.getPrice(),
                 product.getContents(),
                 product.getLocations().stream()
-                        .map(Location::getLocation)
+                        .map(location -> new LocationDto(location.getLocation()))
                         .collect(Collectors.toList()),
                 product.getImages().stream()
-                        .map(Image::getImageUrl)
+                        .map(image -> new ImageDto(image.getImage()))
                         .collect(Collectors.toList()),
                 product.getProductLike().name(),
                 product.getCreatedAt().toString()
