@@ -22,6 +22,7 @@ public class Product {
     @Column(name = "product_id")
     private Long productId; // 변수명 변경
 
+
     private String title;
     private Long price;
     private String contents;
