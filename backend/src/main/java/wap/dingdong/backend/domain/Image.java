@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Image {
@@ -18,9 +17,17 @@ public class Image {
     @Column(name = "image_id")
     private Long id;
 
-    private String imageUrl;
+    private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public void updateProduct(Product product) {
+        this.product = product;
+    }
+
+    public Image(String image) {
+        this.image = image;
+    }
 }

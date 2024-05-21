@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import wap.dingdong.backend.payload.ImageDto;
+import wap.dingdong.backend.payload.LocationDto;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class ProductCreateRequest {
     private String title;
     private Long price;
     private String contents;
-    private List<String> locations;
-    private List<String> images;
+    private List<LocationDto> locations;
+    private List<ImageDto> images;
 
 }
