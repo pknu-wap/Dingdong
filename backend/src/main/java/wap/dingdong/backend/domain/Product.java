@@ -58,7 +58,8 @@ public class Product {
     private List<Comment> comments = new ArrayList<>();
 
 
-    public Product(String title, Long price, String contents, List<Location> locations, List<Image> images) {
+    public Product(User user, String title, Long price, String contents, List<Location> locations, List<Image> images) {
+        this.user = user;
         this.title = title;
         this.price = price;
         this.contents = contents;
