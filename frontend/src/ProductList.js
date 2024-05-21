@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
+
 
 import dummyMouse from './dummy/dummy_mouse.png';
 import dummyShoes from './dummy/dummy_shoes.png';
@@ -12,9 +14,11 @@ import dummyVaccum from './dummy/dummy_vaccum.png';
 import dummyBottle from './dummy/dummy_bottle.png';
 import dummyKeyboard from './dummy/dummy_keyboard.png';
 import dummyHeadphone from './dummy/dummy_headphone.png';
-// 더미 제품 데이터
 
+
+// 더미 제품 데이터
 const product =[
+
     {
         id : 1,
         image : dummyMouse,
@@ -106,41 +110,68 @@ const product =[
         time : '4일 전',
     },
 ];
-// 제품 컴포넌트
-const Product = ({ product }) => {
-    return (
-      <div className="product">
-        <img src= {product.image} alt={product.name} />
-        <div className="info">
-          <h3>{product.name}</h3>
-          <p>{product.price}원</p>
-          <p>{product.location}</p>
-          <p>{product.seller} - {product.time}</p>
+
+const ProductList = () => {
+  /*const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        // 백엔드 API 엔드포인트 설정
+        const response = await axios.get('https://api.example.com/products');
+        setProducts(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+
+    // cleanup 함수
+    return () => {
+    
+    };
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error occurred: {error.message}</p>;*/
+
+  // 그리드 레이아웃 설정
+  const layout = product.map((product, index) => ({
+    i: `${product.id}`,
+    x: index % 4,
+    y: Math.floor(index / 4),
+    w: 1,
+    h: 1,
+  }));
+
+  return (
+    <ReactGridLayout className="grid-layout" layout={layout} cols={4} rowHeight={500} width={1400}>
+      {product.map((product) => (
+        <div key={product.id} className="product_list"style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px'}}>
+          <Product product={product} />
         </div>
+      ))}
+    </ReactGridLayout>
+  );
+};
+
+const Product = ({ product }) => {
+  return (
+    <div className="product">
+      <img src={product.image} width='240px' height='240px' alt={product.name} />
+      <div className="info">
+        <h3>{product.name}</h3>
+        <p>{product.price}원</p>
+        <p>{product.location}</p>
+        <p>{product.seller} - {product.time}</p>
       </div>
-    );
-  };
-  
-  // 그리드 레이아웃 컴포넌트
-  const ProductList = () => {
-    // 그리드 레이아웃 설정
-    const layout = product.map((product, index) => ({
-      i: `${product.id}`, // 고유한 ID로 사용
-      x: index % 4, // 열 위치 계산 (한 줄에 4개씩)
-      y: Math.floor(index / 4), // 행 위치 계산
-      w: 1, // 너비 (1 열)
-      h: 1, // 높이 (1 행)
-    }));
-  
-    return (
-      <ReactGridLayout className="grid-layout" layout={layout} cols={4} rowHeight={500} width={1400} >
-        {product.map((product) => (
-          <div key={product.id} style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px'}}>
-            <Product product={product} />
-          </div>
-        ))}
-      </ReactGridLayout>
-    );
-  };
-  
-  export default ProductList;
+    </div>
+  );
+};
+
+export default ProductList;

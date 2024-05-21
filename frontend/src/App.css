@@ -15,10 +15,13 @@ header .Logo {
   font-style : normal;
 }
 .header-size{
-margin-top:30px;
+margin-top:50px;
 margin-bottom:30px;
 margin-left:100px;
 }
+.nav-bar{
+  color:#fbdd97
+ }
 header .search-bar {
   flex-grow: 1; /* 검색 바를 나머지 공간을 모두 차지하도록 설정 */
   margin: 0 20px; /* 좌우 여백 추가 */
@@ -27,6 +30,15 @@ header .search-bar {
 header .location-selector,
 header .user-options {
   margin-left: 20px; /* 아이콘과 버튼 사이 여백 추가 */
+}
+.icon:hover{              /* 지도에 마우스올릴시 색상변화*/
+  filter: invert(26%) sepia(99%) saturate(1246%) hue-rotate(92deg) brightness(99%) contrast(106%);
+}
+.product_list:hover{
+  background-color: lightgrey;
+}
+.category_click{
+color:#fbdd97;
 }
 
 /* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조절 */
@@ -43,7 +55,7 @@ header .user-options {
   header .search-bar {
     margin: 20px 0; /* 검색 바 위아래 여백 추가 */
   }
-
+ 
   header .location-selector,
   header .user-options {
     margin-left: 0; /* 아이콘과 버튼 여백 제거 */
