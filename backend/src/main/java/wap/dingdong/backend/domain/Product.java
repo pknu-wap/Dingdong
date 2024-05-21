@@ -20,7 +20,8 @@ public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long id;
+    private Long productId; // 변수명 변경
+
 
     private String title;
     private Long price;
