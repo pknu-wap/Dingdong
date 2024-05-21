@@ -31,5 +31,4 @@ public class Location {
         this.location = location;
     }
 
-
 }

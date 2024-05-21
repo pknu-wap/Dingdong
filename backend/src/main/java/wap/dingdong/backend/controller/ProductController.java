@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
+import wap.dingdong.backend.security.CurrentUser;
+import wap.dingdong.backend.security.UserPrincipal;
 import wap.dingdong.backend.service.ProductService;
 
 import java.util.List;
@@ -22,8 +24,9 @@ public class ProductController {
 
     //상품 등록
     @PostMapping("/product")
-    public ResponseEntity<?> createProduct(@RequestBody ProductCreateRequest request) {
-        productService.save(request);
+    public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal, //User 와 요청 DTO 를 별개로 취급
+                                           @RequestBody ProductCreateRequest request) {
+        productService.save(userPrincipal, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
