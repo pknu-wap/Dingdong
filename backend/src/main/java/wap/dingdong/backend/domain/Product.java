@@ -20,8 +20,7 @@ public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long productId; // 변수명 변경
-
+    private Long id;
 
     private String title;
     private Long price;
@@ -59,7 +58,8 @@ public class Product {
     private List<Comment> comments = new ArrayList<>();
 
 
-    public Product(String title, Long price, String contents, List<Location> locations, List<Image> images) {
+    public Product(User user, String title, Long price, String contents, List<Location> locations, List<Image> images) {
+        this.user = user;
         this.title = title;
         this.price = price;
         this.contents = contents;

@@ -22,7 +22,7 @@ public class CommentResponse {
         this.cmtId = comment.getCmtId();
         this.cmtContent = comment.getCmtContent();
         this.cmtRegDate = comment.getCmtRegDate();
-        this.productId = comment.getProduct().getProductId();
+        this.productId = comment.getProduct().getId();
         this.title = comment.getProduct().getTitle();
     }
 }
