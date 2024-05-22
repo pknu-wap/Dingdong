@@ -21,7 +21,6 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-
     private Long cmtId; // 변수명 수정
 
     private String cmtContent; // 변수명 수정
@@ -37,5 +36,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Comment(String cmtContent, User user) {
+        this.cmtContent = cmtContent;
+        this.user = user;
+    }
 
 }

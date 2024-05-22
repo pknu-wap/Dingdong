@@ -1,4 +1,4 @@
-package wap.dingdong.backend.payload;
+package wap.dingdong.backend.security.oauth2.payload.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
