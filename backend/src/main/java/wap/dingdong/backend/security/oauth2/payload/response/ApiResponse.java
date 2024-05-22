@@ -1,4 +1,4 @@
-package wap.dingdong.backend.payload;
+package wap.dingdong.backend.security.oauth2.payload.response;
 
 import lombok.Getter;
 import lombok.Setter;

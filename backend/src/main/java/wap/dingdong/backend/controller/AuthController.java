@@ -16,10 +16,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import wap.dingdong.backend.exception.BadRequestException;
 import wap.dingdong.backend.domain.AuthProvider;
 import wap.dingdong.backend.domain.User;
-import wap.dingdong.backend.payload.ApiResponse;
-import wap.dingdong.backend.payload.AuthResponse;
-import wap.dingdong.backend.payload.LoginRequest;
-import wap.dingdong.backend.payload.SignUpRequest;
+import wap.dingdong.backend.security.oauth2.payload.response.ApiResponse;
+import wap.dingdong.backend.security.oauth2.payload.response.AuthResponse;
+import wap.dingdong.backend.security.oauth2.payload.request.LoginRequest;
+import wap.dingdong.backend.security.oauth2.payload.request.SignUpRequest;
 import wap.dingdong.backend.repository.UserRepository;
 import wap.dingdong.backend.security.TokenProvider;
 

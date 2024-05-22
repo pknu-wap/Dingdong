@@ -3,12 +3,10 @@ package wap.dingdong.backend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
+import wap.dingdong.backend.payload.response.ProductDetailResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.security.CurrentUser;
 import wap.dingdong.backend.security.UserPrincipal;
@@ -40,5 +38,14 @@ public class ProductController {
         ProductsResponse response = new ProductsResponse(products);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //상품 상세보기
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
+        ProductDetailResponse response = productService.getProductDetails(productId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
 }

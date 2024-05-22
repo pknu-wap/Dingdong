@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import wap.dingdong.backend.domain.User;
 import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
+import wap.dingdong.backend.security.CurrentUser;
+import wap.dingdong.backend.security.UserPrincipal;
+import wap.dingdong.backend.service.CommentService;
 import wap.dingdong.backend.service.ProductService;
 
 import java.util.List;
@@ -14,20 +18,20 @@ import java.util.List;
 @RestController
 public class CommentController {
 
-    @Autowired
-    private ProductService productService;
+    private final CommentService commentService;
 
-    // 댓글 조회
-    @GetMapping("/product/{productId}/comment")
-    public ResponseEntity<List<CommentResponse>> getAllCommentsForBoard(@PathVariable Long productId) {
-        List<CommentResponse> comments = productService.getAllCommentsForBoard(productId);
-        return ResponseEntity.ok(comments);
-    }
+//    // 댓글 조회 (상품 상세 조회가 댓글 조회임으로 제외)
+//    @GetMapping("/product/{productId}/comment")
+//    public ResponseEntity<List<CommentResponse>> getAllCommentsForBoard(@PathVariable Long productId) {
+//        List<CommentResponse> comments = productService.getAllCommentsForBoard(productId);
+//        return ResponseEntity.ok(comments);
+//    }
     // 댓글 생성
     @PostMapping("/product/{productId}/comment")
     public ResponseEntity<CommentResponse> createComment(
-            @PathVariable Long productId, @RequestBody CommentRequest commentDto) {
-        CommentResponse createdComment = productService.createComment(productId, commentDto);
+            @PathVariable Long productId, @RequestBody CommentRequest commentDto,
+            @CurrentUser UserPrincipal userPrincipal) {
+        CommentResponse createdComment = commentService.createComment(productId, commentDto, userPrincipal);
         return ResponseEntity.ok(createdComment);
     }
 }

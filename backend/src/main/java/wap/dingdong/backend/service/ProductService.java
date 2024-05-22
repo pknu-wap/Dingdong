@@ -11,6 +11,7 @@ import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
+import wap.dingdong.backend.payload.response.ProductDetailResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
@@ -27,9 +28,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
 
     /*
       상품 등록
@@ -59,7 +57,6 @@ public class ProductService {
         productRepository.save(product);
     }
 
-//===========================================================================================
 
 /*
     모든 상품 조회 (메인페이지 상품 목록)
@@ -70,34 +67,13 @@ public class ProductService {
         return ProductsResponse.of(products); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
-
-    /* ------------- 댓글 -------------- */
-
-    // 댓글 작성
-    public CommentResponse createComment(Long productId, CommentRequest commentDto) {
+/*
+    상품 상세 조회
+ */
+    public ProductDetailResponse getProductDetails(Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
-
-        Comment comment = commentDto.toEntity();
-        comment.setProduct(product);
-
-        Comment savedComment = commentRepository.save(comment);
-        CommentResponse responseDto = new CommentResponse(savedComment);
-        return responseDto;
-    }
-
-    // 댓글 조회
-    public List<CommentResponse> getAllCommentsForBoard(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
-
-        List<CommentResponse> responseDtoList = new ArrayList<>();
-        for (Comment comment : product.getComments()) {
-            CommentResponse responseDto = new CommentResponse(comment);
-            responseDtoList.add(responseDto);
-        }
-
-        return responseDtoList;
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return ProductDetailResponse.of(product);
     }
 
 }
