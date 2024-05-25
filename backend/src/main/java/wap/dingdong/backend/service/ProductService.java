@@ -11,6 +11,7 @@ import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
+import wap.dingdong.backend.payload.response.ProductResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
@@ -70,13 +71,19 @@ public class ProductService {
         return ProductsResponse.of(products); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
+    /* ------------- id값에 해당하는 상품 불러오기 -------------- */
+    public ProductResponse getProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+        return new ProductResponse(product);
+    }
 
     /* ------------- 댓글 -------------- */
 
     // 댓글 작성
-    public CommentResponse createComment(Long productId, CommentRequest commentDto) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+    public CommentResponse createComment(Long id, CommentRequest commentDto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
 
         Comment comment = commentDto.toEntity();
         comment.setProduct(product);
@@ -87,9 +94,9 @@ public class ProductService {
     }
 
     // 댓글 조회
-    public List<CommentResponse> getAllCommentsForBoard(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+    public List<CommentResponse> getAllCommentsForBoard(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
 
         List<CommentResponse> responseDtoList = new ArrayList<>();
         for (Comment comment : product.getComments()) {
@@ -98,6 +105,21 @@ public class ProductService {
         }
 
         return responseDtoList;
+    }
+
+    /* ------------- 상품 찜하기 -------------- */
+    public ProductResponse likeProduct(Long id, Long user_id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        if (product.isLikedByMember(user_id)) {
+            product.decreaseLike(user_id); // 찜하기 취소
+        } else {
+            product.increaseLike(user_id); // 찜하기 추가
+        }
+
+        Product likedProduct = productRepository.save(product);
+        return new ProductResponse(likedProduct);
     }
 
 }
