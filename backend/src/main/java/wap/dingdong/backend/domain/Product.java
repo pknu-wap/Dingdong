@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,13 +34,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus status = ProductStatus.ON_SALE; //기본값 ON_SALE
 
-    // 찜 - 기존 코드
-//    @Enumerated(EnumType.STRING)
-//    private ProductLike productLike = ProductLike.UNLIKE; //기본값 UNLIKE
-
     // 찜 - 수정
-    @Column(columnDefinition = "integer default 0")
-    private Integer productLike; // 상품 찜 수
+    @Column(columnDefinition = "int default 0")
+    private Integer productLike = 0; // 상품 찜 수
 
     // 어노테이션, 데이터타입, 변수명 수정
     @CreationTimestamp
@@ -84,24 +81,23 @@ public class Product {
     @ElementCollection
     @CollectionTable(name = "product_likes", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "user_id")
-    private Set<String> likedByMembers = new HashSet<>(); // 좋아요를 누른 사용자 이메일 저장
+    private Set<Long> likedByMembers = new HashSet<>(); // 좋아요를 누른 사용자 이메일 저장
 
-
-    public void increaseLike(String user_id) {
+    public void increaseLike(Long user_id) {
         if (!likedByMembers.contains(user_id)) {
             productLike++;
             likedByMembers.add(user_id);
         }
     }
 
-    public void decreaseLike(String user_id) {
+    public void decreaseLike(Long user_id) {
         if (likedByMembers.contains(user_id)) {
             productLike--;
             likedByMembers.remove(user_id);
         }
     }
 
-    public boolean isLikedByMember(String user_id) {
+    public boolean isLikedByMember(Long user_id) {
         if (this.user == null || this.likedByMembers.isEmpty()) {
             return false;
         }
