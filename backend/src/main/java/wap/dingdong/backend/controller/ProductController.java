@@ -3,12 +3,10 @@ package wap.dingdong.backend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
+import wap.dingdong.backend.payload.response.ProductResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.security.CurrentUser;
 import wap.dingdong.backend.security.UserPrincipal;
@@ -30,6 +28,13 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 상품 상세보기
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<ProductResponse> getProductByProductId(@PathVariable Long productId) {
+        ProductResponse productResponse = productService.getProduct(productId);
+        return ResponseEntity.ok(productResponse);
+    }
+
     // 전체 상품 조회
     //ProductInfoResponse는 하나의 개별 상품의 정보를 담는 DTO (상품상세 DTO와 비슷)
     //ProductsResponse는 전체 상품 목록을 담는 DTO,
@@ -39,6 +44,13 @@ public class ProductController {
         List<ProductInfoResponse> products = productService.getAllProducts();
         ProductsResponse response = new ProductsResponse(products);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 상품 찜하기 기능
+    @PostMapping("/product/{productId}/like")
+    public ResponseEntity<ProductResponse> likeProduct(@PathVariable Long productId, @RequestHeader("user_id") Long user_id) {
+        ProductResponse likedProduct = productService.likeProduct(productId, user_id);
+        return ResponseEntity.ok(likedProduct);
     }
 
 }
