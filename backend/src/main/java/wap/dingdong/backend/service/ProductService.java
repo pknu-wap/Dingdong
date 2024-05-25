@@ -67,6 +67,18 @@ public class ProductService {
         return ProductsResponse.of(products); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
+    // 페이지네이션된 책 리스트 가져오기
+    public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
+        int offset = (page - 1) * size;
+        List<Product> products = productRepository.findAllByOrderByIdDesc()
+                .stream()
+                .skip(offset) //offset 만큼 건너뜀
+                .limit(size) //size 만큼 가져옴
+                .collect(Collectors.toList());
+        return ProductsResponse.of(products);
+    }
+
+
 /*
     상품 상세 조회
  */

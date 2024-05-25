@@ -39,6 +39,15 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // ex) page=1 을보내면  최신순으로 첫번째 에서 8번째까지 상품 목록을 리스트로 반환함 , page=2 는 9번째부터 16번째
+    @GetMapping("/product/list/recent")
+    public ResponseEntity<?> findRecentUserBooks(@RequestParam int page) {
+        int size = 8; // 페이지 당 상품의 수
+        List<ProductInfoResponse> responses = productService.getRecentPaginatedProducts(page, size);
+        ProductsResponse response = new ProductsResponse(responses);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     //상품 상세보기
     @GetMapping("/product/{productId}")
     public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
