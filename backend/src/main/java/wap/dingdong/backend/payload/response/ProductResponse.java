@@ -18,7 +18,7 @@ public class ProductResponse {
     private Long user_id;
     private String user_email;
 
-    private Timestamp productRegDate;
+    private Timestamp createdAt;
     private Integer productLike;
     private List<CommentResponse> comment;
 
@@ -29,7 +29,7 @@ public class ProductResponse {
         this.contents = product.getContents();
         this.user_id = product.getUser().getId();
         this.user_email = product.getUser().getEmail();
-        this.productRegDate = product.getProductRegDate();
+        this.createdAt = product.getCreatedAt();
         this.productLike = product.getProductLike();
     }
 }

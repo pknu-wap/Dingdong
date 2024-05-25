@@ -40,7 +40,7 @@ public class Product {
 
     // 어노테이션, 데이터타입, 변수명 수정
     @CreationTimestamp
-    private Timestamp productRegDate;
+    private Timestamp createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
