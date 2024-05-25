@@ -23,7 +23,7 @@ public class ProductInfoResponse {
     private String contents;
     private List<LocationDto> locations;
     private List<ImageDto> images;
-    private String productLike;
+//    private String productLike;
     private String createdAt;
 
 
@@ -40,8 +40,8 @@ public class ProductInfoResponse {
                 product.getImages().stream()
                         .map(image -> new ImageDto(image.getImage()))
                         .collect(Collectors.toList()),
-                product.getProductLike().name(),
-                product.getCreatedAt().toString()
+//                product.getProductLike().name(),
+                product.getProductRegDate().toString()
         );
     }
 }
