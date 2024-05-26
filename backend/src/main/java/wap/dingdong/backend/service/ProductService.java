@@ -112,14 +112,17 @@ public class ProductService {
 
     /* ------------- 상품 찜하기 (상품의 productLike 수정) ------------- */
 
-    public ProductResponse likeProduct(Long id, Long user_id) {
+    public ProductResponse likeProduct(Long id, UserPrincipal userPrincipal) {
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        if (product.isLikedByMember(user_id)) {
-            product.decreaseLike(user_id); // 찜하기 취소
+        if (product.isLikedByMember(user.getId())) {
+            product.decreaseLike(user.getId()); // 찜하기 취소
         } else {
-            product.increaseLike(user_id); // 찜하기 추가
+            product.increaseLike(user.getId()); // 찜하기 추가
         }
 
         Product likedProduct = productRepository.save(product);

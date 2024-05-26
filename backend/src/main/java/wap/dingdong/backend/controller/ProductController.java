@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import wap.dingdong.backend.domain.User;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
@@ -29,11 +30,18 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 상품 상세보기
-    //@GetMapping("/product/{productId}")
-    public ResponseEntity<ProductResponse> getProductByProductId(@PathVariable Long productId) {
-        ProductResponse productResponse = productService.getProduct(productId);
-        return ResponseEntity.ok(productResponse);
+//    // 상품 상세보기
+//    //@GetMapping("/product/{productId}")
+//    public ResponseEntity<ProductResponse> getProductByProductId(@PathVariable Long productId) {
+//        ProductResponse productResponse = productService.getProduct(productId);
+//        return ResponseEntity.ok(productResponse);
+//    }
+
+    //상품 상세보기
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
+        ProductDetailResponse response = productService.getProductDetails(productId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 전체 상품 조회
@@ -47,13 +55,7 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 상품 찜하기 기능
-    @PostMapping("/product/{productId}/like")
-    public ResponseEntity<ProductResponse> likeProduct(@PathVariable Long productId, @RequestHeader("user_id") Long user_id) {
-        ProductResponse likedProduct = productService.likeProduct(productId, user_id);
-        return ResponseEntity.ok(likedProduct);
-    }
-
+    //전체 상품 조회 (페이지네이션)
     // ex) page=1 을보내면  최신순으로 첫번째 에서 8번째까지 상품 목록을 리스트로 반환함 , page=2 는 9번째부터 16번째
     @GetMapping("/product/list/recent")
     public ResponseEntity<?> findRecentUserBooks(@RequestParam int page) {
@@ -63,11 +65,14 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //상품 상세보기
-    @GetMapping("/product/{productId}")
-    public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
-        ProductDetailResponse response = productService.getProductDetails(productId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    // 상품 찜하기 기능
+    @PostMapping("/product/{productId}/like")
+    public ResponseEntity<ProductResponse> likeProduct(@PathVariable Long productId,
+                                                       @CurrentUser UserPrincipal userPrincipal) {
+        ProductResponse likedProduct = productService.likeProduct(productId, userPrincipal);
+        return ResponseEntity.ok(likedProduct);
     }
+
+
 
 }
