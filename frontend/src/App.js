@@ -9,7 +9,7 @@ import Productreg from './Productreg';
 
 function App() {
 
-  // message 초기값을 ""으로 설정.
+  // message 초기값을 ""으로 설정.  
   const [message, setMessage] = useState("");
 
   // // useEffect(함수,배열) : 컴포넌트가 화면에 나타났을(마운트)때 자동 실행.

@@ -3,6 +3,7 @@ package wap.dingdong.backend.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -101,6 +102,9 @@ public class SecurityConfig {
                         "/**.html",
                         "/**.css",
                         "/**.js")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET,
+                        "/product/**")
                 .permitAll()
                 .requestMatchers("/auth/**", "/oauth2/**")
                 .permitAll()

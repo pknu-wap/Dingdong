@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
+import wap.dingdong.backend.payload.response.ProductDetailResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.security.CurrentUser;
 import wap.dingdong.backend.security.UserPrincipal;
@@ -29,7 +30,7 @@ public class ProductController {
     }
 
     // 상품 상세보기
-    @GetMapping("/product/{productId}")
+    //@GetMapping("/product/{productId}")
     public ResponseEntity<ProductResponse> getProductByProductId(@PathVariable Long productId) {
         ProductResponse productResponse = productService.getProduct(productId);
         return ResponseEntity.ok(productResponse);
@@ -52,5 +53,23 @@ public class ProductController {
         ProductResponse likedProduct = productService.likeProduct(productId, user_id);
         return ResponseEntity.ok(likedProduct);
     }
+
+    // ex) page=1 을보내면  최신순으로 첫번째 에서 8번째까지 상품 목록을 리스트로 반환함 , page=2 는 9번째부터 16번째
+    @GetMapping("/product/list/recent")
+    public ResponseEntity<?> findRecentUserBooks(@RequestParam int page) {
+        int size = 8; // 페이지 당 상품의 수
+        List<ProductInfoResponse> responses = productService.getRecentPaginatedProducts(page, size);
+        ProductsResponse response = new ProductsResponse(responses);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //상품 상세보기
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
+        ProductDetailResponse response = productService.getProductDetails(productId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
 }

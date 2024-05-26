@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useCallback, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -9,14 +9,35 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Logo from './dummy/dingdong로고.png';
 import mapIcon from './dummy/지도로고.png';
+import './App.css'; 
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태를 관리하기 위한 상태값
-
+  const[ishover,setishover]=useState(new Array(3).fill(false));
   const handleMapIconClick = () => {
     setShowModal(true); // 모달 열기
   };
-
+ const[category1,setCategory1]=useState(false);
+ const[category2,setCategory2]=useState(false);
+ const[category3,setCategory3]=useState(false);
+ const Category1Click=()=>{
+  navigate('/productlist');
+  setCategory1(true);
+  setCategory2(false);
+  setCategory3(false);
+ }
+ const Category2Click=()=>{
+  navigate('/productreg');
+  setCategory1(false);
+  setCategory2(true);
+  setCategory3(false);
+ }
+ const Category3Click=()=>{
+  navigate('/mypage');
+  setCategory1(false);
+  setCategory2(false);
+  setCategory3(true);
+ }
   let navigate=useNavigate();
     return (
         <div>
@@ -36,7 +57,7 @@ const Header = () => {
         </Col>
 
         <Col className='col-2'>
-        <img src= {mapIcon} alt="지도 아이콘" style={{width:'40px',height:'auto',marginBottom:'20px',marginLeft:'10px'}} onClick={handleMapIconClick}/>
+        <img src= {mapIcon} alt="지도 아이콘"className="icon"style={{width:'40px',height:'auto',marginBottom:'20px',marginLeft:'10px'}} onClick={handleMapIconClick}/>
         </Col>
         
         <Col className='col-3'>
@@ -45,13 +66,12 @@ const Header = () => {
       </Row>
       </Container>
    
-     
       <Navbar className="bg-body-tertiary">
       <Container>
       
-        <Navbar.Brand onClick={()=>{navigate('/productlist')}}>전체상품목록</Navbar.Brand>
-        <Navbar.Brand onClick={()=>{navigate('/productreg')}}>상품판매</Navbar.Brand>
-        <Navbar.Brand  onClick={()=>{navigate('/mypage')}}>마이페이지</Navbar.Brand>
+        <Navbar.Brand className={category1?"category_click":""} onClick={Category1Click}onMouseOver={(e)=>{e.target.style.textDecoration="underline"}}onMouseOut={(e)=>{e.target.style.textDecoration="none"}}>전체상품목록</Navbar.Brand>
+        <Navbar.Brand className={category2?"category_click":""}  onClick={Category2Click}onMouseOver={(e)=>{e.target.style.textDecoration="underline"}}onMouseOut={(e)=>{e.target.style.textDecoration="none"}}>상품판매</Navbar.Brand>
+        <Navbar.Brand className={category3?"category_click":""} onClick={Category3Click}onMouseOver={(e)=>{e.target.style.textDecoration="underline"}}onMouseOut={(e)=>{e.target.style.textDecoration="none"}}>마이페이지</Navbar.Brand>
        
       </Container>
     </Navbar>

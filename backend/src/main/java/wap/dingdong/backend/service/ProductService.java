@@ -12,6 +12,7 @@ import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
+import wap.dingdong.backend.payload.response.ProductDetailResponse;
 import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
@@ -28,9 +29,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
 
     /*
       상품 등록
@@ -60,7 +58,6 @@ public class ProductService {
         productRepository.save(product);
     }
 
-//===========================================================================================
 
 /*
     모든 상품 조회 (메인페이지 상품 목록)
@@ -103,8 +100,25 @@ public class ProductService {
             CommentResponse responseDto = new CommentResponse(comment);
             responseDtoList.add(responseDto);
         }
+    // 페이지네이션된 책 리스트 가져오기
+    public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
+        int offset = (page - 1) * size;
+        List<Product> products = productRepository.findAllByOrderByIdDesc()
+                .stream()
+                .skip(offset) //offset 만큼 건너뜀
+                .limit(size) //size 만큼 가져옴
+                .collect(Collectors.toList());
+        return ProductsResponse.of(products);
+    }
 
-        return responseDtoList;
+
+/*
+    상품 상세 조회
+ */
+    public ProductDetailResponse getProductDetails(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return ProductDetailResponse.of(product);
     }
 
     /* ------------- 상품 찜하기 -------------- */

@@ -59,7 +59,11 @@ const ProductList = () => {
     return (
         <ReactGridLayout className="grid-layout" layout={layout} cols={4} rowHeight={500} width={1400} >
             {product.map((product) => (
-                <div key={product.productId} style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px'}}>
+              
+                <div key={product.productId} className="product_list" style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px'}}>
+
+               
+
                     <Product product={product} />
                 </div>
             ))}
@@ -67,4 +71,6 @@ const ProductList = () => {
     );
 };
   
+
 export default ProductList;
+
