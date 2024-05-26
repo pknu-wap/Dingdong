@@ -12,17 +12,16 @@ import java.time.LocalDateTime;
 public class CommentResponse {
     private Long cmtId;
     private String cmtContent;
-    private Timestamp cmtRegDate = Timestamp.valueOf(LocalDateTime.now());
-//    private String userName;
+    private LocalDateTime cmtRegDate;
+    private Long userId;
     private Long productId;
-    private String title; // 상품 이름
 
     // Entity -> Dto
     public CommentResponse(Comment comment) {
         this.cmtId = comment.getCmtId();
         this.cmtContent = comment.getCmtContent();
         this.cmtRegDate = comment.getCmtRegDate();
+        this.userId = comment.getUser().getId();
         this.productId = comment.getProduct().getId();
-        this.title = comment.getProduct().getTitle();
     }
 }

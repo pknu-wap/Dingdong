@@ -31,16 +31,16 @@ public class Product {
     private Long price;
     private String contents;
 
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status = ProductStatus.ON_SALE; //기본값 ON_SALE
+    @Column(columnDefinition = "int default 0")
+    private Integer status = 0; //기본값 0
 
     // 찜 - 수정
     @Column(columnDefinition = "int default 0")
     private Integer productLike = 0; // 상품 찜 수
 
     // 어노테이션, 데이터타입, 변수명 수정
-    @CreationTimestamp
-    private Timestamp createdAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

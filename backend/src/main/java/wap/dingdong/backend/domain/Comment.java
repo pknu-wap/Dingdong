@@ -26,8 +26,8 @@ public class Comment {
     private String cmtContent; // 변수명 수정
 
     // 어노테이션, 데이터타입, 변수명 수정
-    @CreationTimestamp
-    private Timestamp cmtRegDate;
+    @CreatedDate
+    private LocalDateTime cmtRegDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
