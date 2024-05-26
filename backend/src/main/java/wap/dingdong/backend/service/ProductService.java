@@ -59,21 +59,30 @@ public class ProductService {
     }
 
 
-/*
-    모든 상품 조회 (메인페이지 상품 목록)
- */
 
+    //모든 책 리스트 가져오기 (페이지네이션 X)
     public List<ProductInfoResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return ProductsResponse.of(products); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
-    /* ------------- id값에 해당하는 상품 불러오기 -------------- */
-    public ProductResponse getProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-        return new ProductResponse(product);
+    // 페이지네이션 된 책 리스트 가져오기
+    public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
+        int offset = (page - 1) * size;
+        List<Product> products = productRepository.findAllByOrderByIdDesc()
+                .stream()
+                .skip(offset) //offset 만큼 건너뜀
+                .limit(size) //size 만큼 가져옴
+                .collect(Collectors.toList());
+        return ProductsResponse.of(products);
     }
+
+//    /* ------------- id값에 해당하는 상품 불러오기 -------------- */
+//    public ProductResponse getProduct(Long id) {
+//        Product product = productRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+//        return new ProductResponse(product);
+//    }
 
 
 
@@ -89,16 +98,6 @@ public class ProductService {
 //        }
 //    }
 
-    // 페이지네이션된 책 리스트 가져오기
-    public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
-        int offset = (page - 1) * size;
-        List<Product> products = productRepository.findAllByOrderByIdDesc()
-                .stream()
-                .skip(offset) //offset 만큼 건너뜀
-                .limit(size) //size 만큼 가져옴
-                .collect(Collectors.toList());
-        return ProductsResponse.of(products);
-    }
 
 
 /*
@@ -110,7 +109,7 @@ public class ProductService {
         return ProductDetailResponse.of(product);
     }
 
-    /* ------------- 상품 찜하기 (상품의 productLike 수정) ------------- */
+    /* ------------- 상품 찜하기  ------------- */
 
     public ProductResponse likeProduct(Long id, UserPrincipal userPrincipal) {
         User user = userRepository.findById(userPrincipal.getId())
@@ -126,7 +125,7 @@ public class ProductService {
         }
 
         Product likedProduct = productRepository.save(product);
-        return new ProductResponse(likedProduct);
+        return ProductResponse.of(likedProduct);
     }
 
 }

@@ -8,6 +8,7 @@ import wap.dingdong.backend.domain.Product;
 import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.LocationDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,8 @@ public class ProductInfoResponse {
     private List<LocationDto> locations;
     private List<ImageDto> images;
     private Integer productLike;
-    private String createdAt;
+    private LocalDateTime createdAt;
+    private Integer status;
 
 
     public static ProductInfoResponse of(Product product) {
@@ -41,7 +43,8 @@ public class ProductInfoResponse {
                         .map(image -> new ImageDto(image.getImage()))
                         .collect(Collectors.toList()),
                 product.getProductLike(),
-                product.getCreatedAt().toString()
+                product.getCreatedAt(),
+                product.getStatus()
         );
     }
 }

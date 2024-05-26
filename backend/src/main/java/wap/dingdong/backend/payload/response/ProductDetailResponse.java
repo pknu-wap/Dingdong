@@ -22,10 +22,10 @@ public class ProductDetailResponse {
     private Long price;
     private String contents;
     private List<LocationDto> locations;
-    private String status;
-    private List<ImageDto> image;
-    private String productLike;
-    private String createdAt;
+    private Integer status;
+    private List<ImageDto> images;
+    private Integer productLike;
+    private LocalDateTime createdAt;
     private List<CommentDto> comment;
 
     public static ProductDetailResponse of(Product product) {
@@ -38,15 +38,15 @@ public class ProductDetailResponse {
                 product.getLocations().stream()
                         .map(location -> new LocationDto(location.getLocation()))
                         .collect(Collectors.toList()),
-                product.getStatus().toString(),
+                product.getStatus(),
                 product.getImages().stream()
                                 .map(image -> new ImageDto(image.getImage()))
                                 .collect(Collectors.toList()),
-                product.getProductLike().toString(),
-                product.getCreatedAt().toString(),
+                product.getProductLike(),
+                product.getCreatedAt(),
                 product.getComments().stream()
                         .map(comment -> new CommentDto(comment.getCmtId(),comment.getUser().getId(),
-                                comment.getUser().getEmail(), comment.getCmtContent()))
+                                comment.getUser().getEmail(), comment.getCmtContent(), comment.getCmtRegDate()))
                         .collect(Collectors.toList())
         );
     }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class CommentDto {
@@ -11,6 +13,6 @@ public class CommentDto {
     private Long userId;
     private String email;
     private String cmtContent;
-
+    private LocalDateTime cmtRegDate;
 
 }

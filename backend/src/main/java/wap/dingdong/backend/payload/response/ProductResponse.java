@@ -3,33 +3,50 @@ package wap.dingdong.backend.payload.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import wap.dingdong.backend.domain.Product;
+import wap.dingdong.backend.payload.CommentDto;
+import wap.dingdong.backend.payload.ImageDto;
+import wap.dingdong.backend.payload.LocationDto;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
 public class ProductResponse {
 
-    private Long id;
+    private String email;
+    private Long productId;
     private String title;
+    private Long price;
     private String contents;
-
-    private Long user_id;
-    private String user_email;
-
-    private Timestamp createdAt;
+    private List<LocationDto> locations;
+    private Integer status;
+    private List<ImageDto> images;
     private Integer productLike;
-    private List<CommentResponse> comment;
+    private String createdAt;
+    private List<CommentDto> comment;
 
-    /* Entity -> Dto*/
-    public ProductResponse(Product product) {
-        this.id = product.getId();
-        this.title = product.getTitle();
-        this.contents = product.getContents();
-        this.user_id = product.getUser().getId();
-        this.user_email = product.getUser().getEmail();
-        this.createdAt = product.getCreatedAt();
-        this.productLike = product.getProductLike();
+    public static ProductResponse of(Product product) {
+        return new ProductResponse(
+                product.getUser().getEmail(),
+                product.getId(),
+                product.getTitle(),
+                product.getPrice(),
+                product.getContents(),
+                product.getLocations().stream()
+                        .map(location -> new LocationDto(location.getLocation()))
+                        .collect(Collectors.toList()),
+                product.getStatus(),
+                product.getImages().stream()
+                        .map(image -> new ImageDto(image.getImage()))
+                        .collect(Collectors.toList()),
+                product.getProductLike(),
+                product.getCreatedAt().toString(),
+                product.getComments().stream()
+                        .map(comment -> new CommentDto(comment.getCmtId(),comment.getUser().getId(),
+                                comment.getUser().getEmail(), comment.getCmtContent(), comment.getCmtRegDate()))
+                        .collect(Collectors.toList())
+        );
     }
 }
