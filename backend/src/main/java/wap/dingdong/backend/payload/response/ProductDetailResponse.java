@@ -25,7 +25,7 @@ public class ProductDetailResponse {
     private String status;
     private List<ImageDto> image;
     private String productLike;
-    private LocalDateTime createdAt;
+    private String createdAt;
     private List<CommentDto> comment;
 
     public static ProductDetailResponse of(Product product) {
@@ -43,7 +43,7 @@ public class ProductDetailResponse {
                                 .map(image -> new ImageDto(image.getImage()))
                                 .collect(Collectors.toList()),
                 product.getProductLike().toString(),
-                product.getCreatedAt(),
+                product.getCreatedAt().toString(),
                 product.getComments().stream()
                         .map(comment -> new CommentDto(comment.getCmtId(),comment.getUser().getId(),
                                 comment.getUser().getEmail(), comment.getCmtContent()))
