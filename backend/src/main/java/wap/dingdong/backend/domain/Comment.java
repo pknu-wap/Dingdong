@@ -37,9 +37,10 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Comment(String cmtContent, User user) {
+    public Comment(String cmtContent, User user, Product product) {
         this.cmtContent = cmtContent;
         this.user = user;
+        this.product = product;
     }
 
 }

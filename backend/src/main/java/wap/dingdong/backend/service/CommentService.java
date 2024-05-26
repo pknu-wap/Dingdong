@@ -37,8 +37,7 @@ public class CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
 
         //이미 등록된 상품에 새 댓글을 등록할때는 댓글엔티티의 상품 FK만 적절히 넣으면됨
-        Comment comment = new Comment(commentDto.getCmtContent(), user);
-        comment.setProduct(product);
+        Comment comment = new Comment(commentDto.getCmtContent(), user, product);
 
         Comment savedComment = commentRepository.save(comment);
         CommentResponse responseDto = new CommentResponse(savedComment);

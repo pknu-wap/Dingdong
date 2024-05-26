@@ -51,7 +51,7 @@ public class ProductService {
         Product product = new Product(user, request.getTitle(), request.getPrice(),
                 request.getContents(), locations, images);
 
-        // 양방향 연관관계 데이터 일관성 유지
+        // 양방향 연관관계 데이터 일관성 유지 : 연관관계의 주인이 아닌쪽의 엔티티가 변경되었을때 연관관계의 주인의 엔티티도 set
         locations.forEach(location -> location.updateProduct(product));
         images.forEach(image -> image.updateProduct(product));
 
@@ -75,31 +75,20 @@ public class ProductService {
         return new ProductResponse(product);
     }
 
-    /* ------------- 댓글 -------------- */
 
-    // 댓글 작성
-    public CommentResponse createComment(Long id, CommentRequest commentDto) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-
-        Comment comment = commentDto.toEntity();
-        comment.setProduct(product);
-
-        Comment savedComment = commentRepository.save(comment);
-        CommentResponse responseDto = new CommentResponse(savedComment);
-        return responseDto;
-    }
 
     // 댓글 조회
-    public List<CommentResponse> getAllCommentsForBoard(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+//    public List<CommentResponse> getAllCommentsForBoard(Long id) {
+//        Product product = productRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+//
+//        List<CommentResponse> responseDtoList = new ArrayList<>();
+//        for (Comment comment : product.getComments()) {
+//            CommentResponse responseDto = new CommentResponse(comment);
+//            responseDtoList.add(responseDto);
+//        }
+//    }
 
-        List<CommentResponse> responseDtoList = new ArrayList<>();
-        for (Comment comment : product.getComments()) {
-            CommentResponse responseDto = new CommentResponse(comment);
-            responseDtoList.add(responseDto);
-        }
     // 페이지네이션된 책 리스트 가져오기
     public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
         int offset = (page - 1) * size;
@@ -121,7 +110,8 @@ public class ProductService {
         return ProductDetailResponse.of(product);
     }
 
-    /* ------------- 상품 찜하기 -------------- */
+    /* ------------- 상품 찜하기 (상품의 productLike 수정) ------------- */
+
     public ProductResponse likeProduct(Long id, Long user_id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -137,3 +127,6 @@ public class ProductService {
     }
 
 }
+
+
+
