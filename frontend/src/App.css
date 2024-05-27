@@ -40,7 +40,61 @@ header .user-options {
 .category_click{
 color:#fbdd97;
 }
+.product-detail-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+}
 
+.product-image {
+  flex: 1;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.product-info h1 {
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: 24px;
+  color: #E74C3C;
+  margin-bottom: 10px;
+}
+
+.product-location {
+  font-size: 18px;
+  color: #7F8C8D;
+  margin-bottom: 20px;
+}
+
+.product-description {
+  margin-top: 20px;
+}
+
+.product-description h3 {
+  margin-bottom: 10px;
+}
+
+.product-description p {
+  line-height: 1.6;
+}
+.product-comment{
+  flex:1;
+}
 /* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조절 */
 @media (max-width: 768px) {
   /* 화면 너비가 768px 이하일 때 적용되는 스타일 */

@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
+import { useNavigate } from 'react-router-dom';
+
 
 // 제품 컴포넌트
 const Product = ({ product }) => {
+    const navigate=useNavigate();
+    const handleProductClick=()=>{
+        console.log("제품상세페이지");
+        navigate(`/productdetail/${product.productId}`);
+}
     return (
-      <div className="product">
+      <div className="product" onClick={handleProductClick} style={{ cursor: 'pointer' }} >
         <img src= {product.images[0]} alt={product.title} />
         <div className="info">
           <h3>{product.title}</h3>
@@ -19,11 +26,12 @@ const Product = ({ product }) => {
 };
   
 // 그리드 레이아웃 컴포넌트
-const ProductList = () => {
-    const [product, setProduct] = useState([]);
+const ProductList = ({product,setProduct}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+   
+   
+    
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -57,17 +65,16 @@ const ProductList = () => {
     }));
 
     return (
-        <ReactGridLayout className="grid-layout" layout={layout} cols={4} rowHeight={500} width={1400} >
-            {product.map((product) => (
+        <ReactGridLayout isDraggable={false} isResizable={false}layout={layout} cols={4} rowHeight={500} width={1400} >
+            {product&&product.map((product) => (
               
-                <div key={product.productId} className="product_list" style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px'}}>
+                <div key={product.productId} className="product_list"  style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px',cursor: 'pointer'}}>
 
-               
-
-                    <Product product={product} />
+                    <Product product={product}/>
                 </div>
             ))}
         </ReactGridLayout>
+        
     );
 };
   
