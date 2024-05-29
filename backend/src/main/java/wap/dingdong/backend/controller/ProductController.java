@@ -65,12 +65,12 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 상품 찜하기 기능
-    @PostMapping("/product/{productId}/like")
-    public ResponseEntity<ProductResponse> likeProduct(@PathVariable Long productId,
+    // 상품 상태 변경하기 기능
+    @PostMapping("/product/{productId}/status")
+    public ResponseEntity<ProductResponse> changeStatus(@PathVariable Long productId,
                                                        @CurrentUser UserPrincipal userPrincipal) {
-        ProductResponse likedProduct = productService.likeProduct(productId, userPrincipal);
-        return ResponseEntity.ok(likedProduct);
+        ProductResponse changedStatus = productService.changeStatus(productId, userPrincipal);
+        return ResponseEntity.ok(changedStatus);
     }
 
 

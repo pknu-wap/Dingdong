@@ -75,32 +75,34 @@ public class Product {
     }
 
 
-    /* ------------- 상품 찜하기 메소드 -------------- */
+    /* ------------- 상품 상태 변경 메소드 -------------- */
 
-    // 찜하기 클릭한 사용자 이메일 저장
-    @ElementCollection
-    @CollectionTable(name = "product_likes", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "user_id")
-    private Set<Long> likedByMembers = new HashSet<>(); // 좋아요를 누른 사용자 이메일 저장
+    // 상품 상태 변경한 사용자 이메일 저장
+//    @ElementCollection
+//    @CollectionTable(name = "product_likes", joinColumns = @JoinColumn(name = "product_id"))
+//    @Column(name = "user_id")
+//    private Set<Long> changeMember = new HashSet<>(); // 상품 상태를 변경한 사용자 이메일 저장
 
-    public void increaseLike(Long user_id) {
-        if (!likedByMembers.contains(user_id)) {
-            productLike++;
-            likedByMembers.add(user_id);
+    public void changeToSoldout(Long user_id) {
+        if (!user.getId().equals(user_id)) {
+            throw new IllegalStateException("상품을 게시한 사용자만 상품의 상태를 변경할 수 있습니다.");
+        } else {
+            status++;
         }
     }
 
-    public void decreaseLike(Long user_id) {
-        if (likedByMembers.contains(user_id)) {
-            productLike--;
-            likedByMembers.remove(user_id);
+    public void changeToOnsale(Long user_id) {
+        if (!user.getId().equals(user_id)) {
+            throw new IllegalStateException("상품을 게시한 사용자만 상품의 상태를 변경할 수 있습니다.");
+        } else {
+            status--;
         }
     }
 
-    public boolean isLikedByMember(Long user_id) {
-        if (this.user == null || this.likedByMembers.isEmpty()) {
-            return false;
-        }
-        return this.likedByMembers.contains(user_id);
-    }
+//    public boolean isLikedByMember(Long user_id) {
+//        if (this.user == null || this.likedByMembers.isEmpty()) {
+//            return false;
+//        }
+//        return this.likedByMembers.contains(user_id);
+//    }
 }
