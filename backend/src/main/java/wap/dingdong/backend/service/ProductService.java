@@ -109,23 +109,24 @@ public class ProductService {
         return ProductDetailResponse.of(product);
     }
 
-    /* ------------- 상품 찜하기  ------------- */
+    /* ------------- 상품 상태 변경하기  ------------- */
+    // status = 0 : 판매중, status = 1 : 판매완료
 
-    public ProductResponse likeProduct(Long id, UserPrincipal userPrincipal) {
+    public ProductResponse changeStatus(Long id, UserPrincipal userPrincipal) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        if (product.isLikedByMember(user.getId())) {
-            product.decreaseLike(user.getId()); // 찜하기 취소
+        if (product.getStatus() == 1) {
+            product.changeToOnsale(user.getId()); // status 값 -1
         } else {
-            product.increaseLike(user.getId()); // 찜하기 추가
+            product.changeToSoldout(user.getId()); // status 값 +1
         }
 
-        Product likedProduct = productRepository.save(product);
-        return ProductResponse.of(likedProduct);
+        Product changedStatus = productRepository.save(product);
+        return ProductResponse.of(changedStatus);
     }
 
 }
