@@ -1,10 +1,12 @@
 package wap.dingdong.backend.service;
 
-
+import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import wap.dingdong.backend.domain.*;
 import wap.dingdong.backend.exception.ResourceNotFoundException;
 import wap.dingdong.backend.payload.request.CommentRequest;
@@ -19,7 +21,9 @@ import wap.dingdong.backend.repository.ProductRepository;
 import wap.dingdong.backend.repository.UserRepository;
 import wap.dingdong.backend.security.UserPrincipal;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,26 +38,36 @@ public class ProductService {
       상품 등록
    */
     @Transactional
-    public void save(UserPrincipal userPrincipal, ProductCreateRequest request) {
+    public void save(UserPrincipal userPrincipal, ProductCreateRequest request, List<MultipartFile> images) {
+        // 요청토큰에 해당하는 user 를 꺼내옴
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        //요청토큰에 해당하는 user 를 꺼내옴
-        User user = userRepository.findById(userPrincipal.getId()).get();
-
-        //locationDto 를 location 엔티티객체로 변환 (DB 사용을 위해)
+        // locationDto 를 location 엔티티객체로 변환 (DB 사용을 위해)
         List<Location> locations = request.getLocations().stream()
                 .map(locationDto -> new Location(locationDto.getLocation()))
                 .collect(Collectors.toList());
 
-        List<Image> images = request.getImages().stream()
-                .map(imageDto -> new Image(imageDto.getImage()))
+        // MultipartFile 데이터를 Base64 인코딩하여 Image 엔티티로 변환
+        List<Image> imageEntities = images.stream()
+                .map(image -> {
+                    try {
+                        String base64Image = Base64.getEncoder().encodeToString(image.getBytes());
+                        return new Image(base64Image);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to encode image", e);
+                    }
+                })
                 .collect(Collectors.toList());
 
-        Product product = new Product(user, request.getTitle(), request.getPrice(),
-                request.getContents(), locations, images);
 
-        // 양방향 연관관계 데이터 일관성 유지 : 연관관계의 주인이 아닌쪽의 엔티티가 변경되었을때 연관관계의 주인의 엔티티도 set
+        Product product = new Product(user, request.getTitle(), request.getPrice(),
+                request.getContents(), locations, imageEntities);
+
+
+
+        // 양방향 연관관계 데이터 일관성 유지
         locations.forEach(location -> location.updateProduct(product));
-        images.forEach(image -> image.updateProduct(product));
+        imageEntities.forEach(image -> image.updateProduct(product));
 
         productRepository.save(product);
     }
