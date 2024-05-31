@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import wap.dingdong.backend.domain.Product;
 import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.LocationDto;
-import wap.dingdong.backend.security.UserPrincipal;
 
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCreateRequest {
@@ -23,4 +22,7 @@ public class ProductCreateRequest {
     private List<ImageDto> images;
 
 
+    public ProductCreateRequest(List<ImageDto> imageDtos) {
+        this.images = imageDtos;
+    }
 }
