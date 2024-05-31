@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import wap.dingdong.backend.domain.User;
-import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
@@ -16,11 +14,7 @@ import wap.dingdong.backend.security.CurrentUser;
 import wap.dingdong.backend.security.UserPrincipal;
 import wap.dingdong.backend.service.ProductService;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,22 +23,12 @@ public class ProductController {
     private final ProductService productService;
 
     //상품 등록
-//    @PostMapping("/product")
-//    public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal, //User 와 요청 DTO 를 별개로 취급
-//                                           @RequestBody ProductCreateRequest request) {
-//        productService.save(userPrincipal, request);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @PostMapping("/product")
-    public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal,
-                                           @RequestPart("product") ProductCreateRequest request,
-                                           @RequestPart("images") List<MultipartFile> images) {
-        productService.save(userPrincipal, request, images);
+    public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal, //User 와 요청 DTO 를 별개로 취급
+                                           @RequestBody ProductCreateRequest request) {
+        productService.save(userPrincipal, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 
 //    // 상품 상세보기
 //    //@GetMapping("/product/{productId}")
