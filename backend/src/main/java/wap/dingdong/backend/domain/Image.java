@@ -17,6 +17,7 @@ public class Image {
     @Column(name = "image_id")
     private Long id;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
