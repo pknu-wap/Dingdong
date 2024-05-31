@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.LocationDto;
 
@@ -20,6 +21,7 @@ public class ProductCreateRequest {
     private String contents;
     private List<LocationDto> locations;
     private List<ImageDto> images;
+    private List<MultipartFile> imageFiles;
 
 
     public ProductCreateRequest(List<ImageDto> imageDtos) {

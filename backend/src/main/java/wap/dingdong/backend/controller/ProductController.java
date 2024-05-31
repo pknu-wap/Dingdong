@@ -24,14 +24,17 @@ public class ProductController {
 
     private final ProductService productService;
 
-    //상품등록
+    // 상품 등록
     @PostMapping("/product")
     public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal,
-                                           @RequestPart("images") MultipartFile imageFile,
+                                           @RequestPart("imageFiles") List<MultipartFile> imageFiles,
                                            @RequestPart("product") ProductCreateRequest request) throws IOException {
-        productService.save(userPrincipal, imageFile, request);
+        // 이미지 파일들을 ProductCreateRequest 객체에 설정
+        request.setImageFiles(imageFiles);
+        productService.save(userPrincipal, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 //    // 상품 상세보기
 //    //@GetMapping("/product/{productId}")

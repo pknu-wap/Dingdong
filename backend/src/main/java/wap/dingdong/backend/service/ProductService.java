@@ -45,11 +45,20 @@ public class ProductService {
       상품 등록
    */
     @Transactional
-    public void save(UserPrincipal userPrincipal, MultipartFile imageFile, ProductCreateRequest request) throws IOException {
+    public void save(UserPrincipal userPrincipal, ProductCreateRequest request) throws IOException {
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
-        String imageUrl = uploadImageToS3(imageFile);
-        Product product = createProduct(user, request, imageUrl);
+        List<String> imageUrls = uploadImagesToS3(request.getImageFiles());
+        Product product = createProduct(user, request, imageUrls);
         productRepository.save(product);
+    }
+
+    private List<String> uploadImagesToS3(List<MultipartFile> imageFiles) throws IOException {
+        List<String> imageUrls = new ArrayList<>();
+        for (MultipartFile imageFile : imageFiles) {
+            String imageUrl = uploadImageToS3(imageFile);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
     }
 
     private String uploadImageToS3(MultipartFile imageFile) throws IOException {
@@ -59,19 +68,13 @@ public class ProductService {
         return amazonS3.getUrl(s3Config.getBucketName(), fileName).toString();
     }
 
-    private Product createProduct(User user, ProductCreateRequest request, String imageUrl) {
+    private Product createProduct(User user, ProductCreateRequest request, List<String> imageUrls) {
         List<Location> locations = request.getLocations().stream()
                 .map(locationDto -> new Location(locationDto.getLocation()))
                 .collect(Collectors.toList());
-        // 이미지 URL을 사용하여 ImageDto 생성
-        List<ImageDto> imageDtos = new ArrayList<>();
-        imageDtos.add(new ImageDto(imageUrl)); // 이미지 URL 추가
 
-        // ProductCreateRequest 객체 생성 및 초기화
-        ProductCreateRequest modifiedRequest = new ProductCreateRequest(imageDtos);
-
-        List<Image> images = modifiedRequest.getImages().stream()
-                .map(imageDto -> new Image(imageDto.getImage()))
+        List<Image> images = imageUrls.stream()
+                .map(imageUrl -> new Image(imageUrl))
                 .collect(Collectors.toList());
 
         Product product = new Product(user, request.getTitle(), request.getPrice(),
@@ -82,6 +85,7 @@ public class ProductService {
 
         return product;
     }
+
 
 
 
