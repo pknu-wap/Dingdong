@@ -27,7 +27,7 @@ public class ProductController {
     // 상품 등록
     @PostMapping("/product")
     public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal,
-                                           @RequestPart("imageFiles") List<MultipartFile> imageFiles,
+                                           @RequestPart("images") List<MultipartFile> imageFiles,
                                            @RequestPart("product") ProductCreateRequest request) throws IOException {
         // 이미지 파일들을 ProductCreateRequest 객체에 설정
         request.setImageFiles(imageFiles);
