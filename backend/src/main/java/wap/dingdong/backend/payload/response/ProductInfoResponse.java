@@ -24,7 +24,7 @@ public class ProductInfoResponse {
     private String contents;
     private List<LocationDto> locations;
     private List<ImageDto> images;
-    private Integer productLike;
+    private Integer liked;
     private LocalDateTime createdAt;
     private Integer status;
 
@@ -42,7 +42,7 @@ public class ProductInfoResponse {
                 product.getImages().stream()
                         .map(image -> new ImageDto(image.getImage()))
                         .collect(Collectors.toList()),
-                product.getProductLike(),
+                product.getLiked(),
                 product.getCreatedAt(),
                 product.getStatus()
         );
