@@ -82,7 +82,7 @@ public class ProductController {
     }
 
     // 찜한 상품 목록 조회
-    @GetMapping("/product/liked")
+    @GetMapping("/mypage/liked")
     public ResponseEntity<?> getLikedProducts(@CurrentUser UserPrincipal currentUser) {
         List<ProductInfoResponse> likedProducts = productService.getLikedProducts(currentUser)
                 .stream()
