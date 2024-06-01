@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -47,17 +48,22 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Wish> wishes = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Wish> wishList = new ArrayList<>();
 
+    public List<Product> getLikedProducts() {
+        return wishList.stream()
+                .map(Wish::getProduct)
+                .collect(Collectors.toList());
+    }
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Sell> sells = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Buy> buys = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    List<Buy> buys = new ArrayList<>();
 
 
 }
