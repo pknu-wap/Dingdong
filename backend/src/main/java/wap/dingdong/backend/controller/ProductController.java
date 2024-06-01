@@ -17,6 +17,7 @@ import wap.dingdong.backend.service.ProductService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -79,6 +80,23 @@ public class ProductController {
         return ResponseEntity.ok(changedStatus);
     }
 
+    // 상품 찜하기
+    @PostMapping("/product/{productId}/like")
+    public ResponseEntity<?> likeProduct(@PathVariable Long productId, @CurrentUser UserPrincipal currentUser) {
+        productService.likeProduct(productId, currentUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    // 찜한 상품 목록 조회
+    @GetMapping("/mypage/liked")
+    public ResponseEntity<?> getLikedProducts(@CurrentUser UserPrincipal currentUser) {
+        List<ProductInfoResponse> likedProducts = productService.getLikedProducts(currentUser)
+                .stream()
+                .map(ProductInfoResponse::of)
+                .collect(Collectors.toList());
+
+        ProductsResponse response = new ProductsResponse(likedProducts);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }

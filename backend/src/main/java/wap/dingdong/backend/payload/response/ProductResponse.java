@@ -23,7 +23,7 @@ public class ProductResponse {
     private List<LocationDto> locations;
     private Integer status;
     private List<ImageDto> images;
-    private Integer productLike;
+    private Integer liked;
     private String createdAt;
     private List<CommentDto> comment;
 
@@ -41,7 +41,7 @@ public class ProductResponse {
                 product.getImages().stream()
                         .map(image -> new ImageDto(image.getImage()))
                         .collect(Collectors.toList()),
-                product.getProductLike(),
+                product.getLiked(),
                 product.getCreatedAt().toString(),
                 product.getComments().stream()
                         .map(comment -> new CommentDto(comment.getCmtId(),comment.getUser().getId(),
