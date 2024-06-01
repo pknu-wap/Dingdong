@@ -17,6 +17,7 @@ import wap.dingdong.backend.payload.response.ProductsResponse;
 import wap.dingdong.backend.repository.CommentRepository;
 import wap.dingdong.backend.repository.ProductRepository;
 import wap.dingdong.backend.repository.UserRepository;
+import wap.dingdong.backend.repository.WishRepository;
 import wap.dingdong.backend.security.UserPrincipal;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
+    private final WishRepository wishRepository;
     /*
       상품 등록
    */
@@ -127,6 +128,40 @@ public class ProductService {
 
         Product changedStatus = productRepository.save(product);
         return ProductResponse.of(changedStatus);
+    }
+
+    /* ------------- 상품 찜하기  ------------- */
+    @Transactional
+    public void likeProduct(Long productId, UserPrincipal currentUser) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Wish wish = wishRepository.findByProductAndUser(product, user)
+                .orElse(new Wish(product, user));
+
+        if (wish.getLiked() == 0) {
+            wish.setLiked(1);
+            product.increaseLiked();
+        } else {
+            wish.setLiked(0);
+            product.decreaseLiked();
+        }
+
+        wishRepository.save(wish);
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public List<Product> getLikedProducts(UserPrincipal currentUser) {
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Wish> wishes = wishRepository.findByUserAndLiked(user, 1);
+        return wishes.stream()
+                .map(Wish::getProduct)
+                .collect(Collectors.toList());
     }
 
 }
