@@ -19,6 +19,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
@@ -32,11 +33,11 @@ public class Product {
     private String contents;
 
     @Column(columnDefinition = "int default 0")
-    private Integer status = 0; //기본값 0
+    private Integer status = 0; // 0 : 기본값, 판매중 / 1 : 판매완료
 
     // 찜 - 수정
     @Column(columnDefinition = "int default 0")
-    private Integer productLike = 0; // 상품 찜 수
+    private Integer liked = 0; // 상품 찜 수
 
     // 어노테이션, 데이터타입, 변수명 수정
     @CreatedDate
@@ -46,14 +47,14 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Buy buy;
+//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Buy buy;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Sell sell;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Wish wish;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Wish> wishes = new ArrayList<>();
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
@@ -76,13 +77,6 @@ public class Product {
 
 
     /* ------------- 상품 상태 변경 메소드 -------------- */
-
-    // 상품 상태 변경한 사용자 이메일 저장
-//    @ElementCollection
-//    @CollectionTable(name = "product_likes", joinColumns = @JoinColumn(name = "product_id"))
-//    @Column(name = "user_id")
-//    private Set<Long> changeMember = new HashSet<>(); // 상품 상태를 변경한 사용자 이메일 저장
-
     public void changeToSoldout(Long user_id) {
         if (!user.getId().equals(user_id)) {
             throw new IllegalStateException("상품을 게시한 사용자만 상품의 상태를 변경할 수 있습니다.");
@@ -99,10 +93,12 @@ public class Product {
         }
     }
 
-//    public boolean isLikedByMember(Long user_id) {
-//        if (this.user == null || this.likedByMembers.isEmpty()) {
-//            return false;
-//        }
-//        return this.likedByMembers.contains(user_id);
-//    }
+    /* ------------- 상품 찜하기 -------------- */
+    public void increaseLiked() {
+        this.liked += 1;
+    }
+
+    public void decreaseLiked() {
+        this.liked -= 1;
+    }
 }
