@@ -1,12 +1,19 @@
 package wap.dingdong.backend.service;
 
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import wap.dingdong.backend.config.S3Config;
 import wap.dingdong.backend.domain.*;
 import wap.dingdong.backend.exception.ResourceNotFoundException;
+import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
@@ -20,6 +27,7 @@ import wap.dingdong.backend.repository.UserRepository;
 import wap.dingdong.backend.repository.WishRepository;
 import wap.dingdong.backend.security.UserPrincipal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,33 +39,55 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
+    private final AmazonS3 amazonS3;
+    private final S3Config s3Config;
+
+
     /*
       상품 등록
    */
     @Transactional
-    public void save(UserPrincipal userPrincipal, ProductCreateRequest request) {
+    public void save(UserPrincipal userPrincipal, ProductCreateRequest request) throws IOException {
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+        List<String> imageUrls = uploadImagesToS3(request.getImageFiles());
+        Product product = createProduct(user, request, imageUrls);
+        productRepository.save(product);
+    }
 
-        //요청토큰에 해당하는 user 를 꺼내옴
-        User user = userRepository.findById(userPrincipal.getId()).get();
+    private List<String> uploadImagesToS3(List<MultipartFile> imageFiles) throws IOException {
+        List<String> imageUrls = new ArrayList<>();
+        for (MultipartFile imageFile : imageFiles) {
+            String imageUrl = uploadImageToS3(imageFile);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
 
-        //locationDto 를 location 엔티티객체로 변환 (DB 사용을 위해)
+    private String uploadImageToS3(MultipartFile imageFile) throws IOException {
+        String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+        amazonS3.putObject(new PutObjectRequest(s3Config.getBucketName(), fileName, imageFile.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3.getUrl(s3Config.getBucketName(), fileName).toString();
+    }
+
+    private Product createProduct(User user, ProductCreateRequest request, List<String> imageUrls) {
         List<Location> locations = request.getLocations().stream()
                 .map(locationDto -> new Location(locationDto.getLocation()))
                 .collect(Collectors.toList());
 
-        List<Image> images = request.getImages().stream()
-                .map(imageDto -> new Image(imageDto.getImage()))
+        List<Image> images = imageUrls.stream()
+                .map(imageUrl -> new Image(imageUrl))
                 .collect(Collectors.toList());
 
         Product product = new Product(user, request.getTitle(), request.getPrice(),
                 request.getContents(), locations, images);
 
-        // 양방향 연관관계 데이터 일관성 유지 : 연관관계의 주인이 아닌쪽의 엔티티가 변경되었을때 연관관계의 주인의 엔티티도 set
         locations.forEach(location -> location.updateProduct(product));
         images.forEach(image -> image.updateProduct(product));
 
-        productRepository.save(product);
+        return product;
     }
+
 
 
 

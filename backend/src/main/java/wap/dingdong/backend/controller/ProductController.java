@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import wap.dingdong.backend.domain.User;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
@@ -14,6 +15,7 @@ import wap.dingdong.backend.security.CurrentUser;
 import wap.dingdong.backend.security.UserPrincipal;
 import wap.dingdong.backend.service.ProductService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,13 +25,17 @@ public class ProductController {
 
     private final ProductService productService;
 
-    //상품 등록
+    // 상품 등록
     @PostMapping("/product")
-    public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal, //User 와 요청 DTO 를 별개로 취급
-                                           @RequestBody ProductCreateRequest request) {
+    public ResponseEntity<?> createProduct(@CurrentUser UserPrincipal userPrincipal,
+                                           @RequestPart("images") List<MultipartFile> imageFiles,
+                                           @RequestPart("product") ProductCreateRequest request) throws IOException {
+        // 이미지 파일들을 ProductCreateRequest 객체에 설정
+        request.setImageFiles(imageFiles);
         productService.save(userPrincipal, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 //    // 상품 상세보기
 //    //@GetMapping("/product/{productId}")
