@@ -13,10 +13,10 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("SELECT p FROM Product p WHERE lower(p.title) like lower(concat('%', :name, '%')) ORDER BY p.id DESC")
     List<Product> searchAllProductsByName(@Param("name") String name);
 
-    @Query("SELECT p FROM Product p JOIN p.locations l WHERE l.location LIKE :location1 OR l.location LIKE :location2 ORDER BY p.id DESC")
-    List<Product> searchAllProductsByTwoRegion(@Param("location1") String location1, @Param("location2") String location2);
+    @Query("SELECT p FROM Product p JOIN p.locations l WHERE (l.location LIKE :location1 OR l.location LIKE :location2) AND (lower(p.title) like lower(concat('%', :name, '%'))) ORDER BY p.id DESC")
+    List<Product> searchAllProductsByTwoRegion(@Param("location1") String location1, @Param("location2") String location2, @Param("name") String name);
 
-    @Query("SELECT p FROM Product p JOIN p.locations l WHERE l.location LIKE :location1 ORDER BY p.id DESC")
-    List<Product> searchAllProductsByOneRegion(@Param("location1") String location1);
+    @Query("SELECT p FROM Product p JOIN p.locations l WHERE (l.location LIKE :location1) AND (lower(p.title) like lower(concat('%', :name, '%'))) ORDER BY p.id DESC")
+    List<Product> searchAllProductsByOneRegion(@Param("location1") String location1, @Param("name") String name);
 
 }

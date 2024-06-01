@@ -85,9 +85,9 @@ public class ProductService {
     }
 
     //상품 지역2개로 검색 (페이지네이션)
-    public List<ProductInfoResponse> searchProductsByTwoRegion(String location1, String location2, int page, int size) {
+    public List<ProductInfoResponse> searchProductsByTwoRegion(String name, String location1, String location2, int page, int size) {
         int offset = (page - 1) * size;
-        List<Product> products = productRepository.searchAllProductsByTwoRegion(location1, location2);
+        List<Product> products = productRepository.searchAllProductsByTwoRegion(location1, location2, name);
         return products.stream()
                 .skip(offset)
                 .limit(size)
@@ -96,9 +96,9 @@ public class ProductService {
     }
 
     //상품 지역1개로 검색 (페이지네이션)
-    public List<ProductInfoResponse> searchProductsByOneRegion(String location1, int page, int size) {
+    public List<ProductInfoResponse> searchProductsByOneRegion(String name, String location1, int page, int size) {
         int offset = (page - 1) * size;
-        List<Product> products = productRepository.searchAllProductsByOneRegion(location1);
+        List<Product> products = productRepository.searchAllProductsByOneRegion(location1, name);
         return products.stream()
                 .skip(offset)
                 .limit(size)

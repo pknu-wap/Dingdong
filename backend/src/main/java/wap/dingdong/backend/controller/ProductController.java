@@ -76,36 +76,37 @@ public class ProductController {
     //상품의 지역으로 검색 =====================================================================
     @GetMapping("/product/search/region")
     public ResponseEntity<?> searchProducts(
+            @RequestParam String title,
             @RequestParam(required = false) String location1,
             @RequestParam(required = false) String location2,
             @RequestParam int page) {
 
         if (location1 != null && location2 != null) {
-            return searchTwoRegionProducts(location1, location2, page);
+            return searchTwoRegionProducts(title, location1, location2, page);
         } else if (location1 != null) {
-            return searchOneRegionProducts(location1, page);
+            return searchOneRegionProducts(title, location1, page);
         } else {
             // 에러
             return ResponseEntity.badRequest().build();
         }
     }
 
-    private ResponseEntity<?> searchTwoRegionProducts(String location1, String location2, int page) {
+    private ResponseEntity<?> searchTwoRegionProducts(String title, String location1, String location2, int page) {
         int size = 8; // 페이지 당 상품의 수
-        List<ProductInfoResponse> responses = productService.searchProductsByTwoRegion(location1, location2, page, size);
+        List<ProductInfoResponse> responses = productService.searchProductsByTwoRegion(title, location1, location2, page, size);
         ProductsResponse response = new ProductsResponse(responses);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    private ResponseEntity<?> searchOneRegionProducts(String location1, int page) {
+    private ResponseEntity<?> searchOneRegionProducts(String title, String location1, int page) {
         int size = 8; // 페이지 당 상품의 수
-        List<ProductInfoResponse> responses = productService.searchProductsByOneRegion(location1, page, size);
+        List<ProductInfoResponse> responses = productService.searchProductsByOneRegion(title, location1, page, size);
         ProductsResponse response = new ProductsResponse(responses);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //=====================================================================
 
-    // 상품 상태(판매여부) 변경하기 기능
+     // 상품 상태(판매여부) 변경하기 기능
     @PostMapping("/product/{productId}/status")
     public ResponseEntity<ProductResponse> changeStatus(@PathVariable Long productId,
                                                        @CurrentUser UserPrincipal userPrincipal) {
