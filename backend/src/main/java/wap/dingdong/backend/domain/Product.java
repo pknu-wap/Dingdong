@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import wap.dingdong.backend.payload.request.ProductCreateRequest;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -101,4 +103,24 @@ public class Product {
     public void decreaseLiked() {
         this.liked -= 1;
     }
+
+    //상품 생성 메서드
+    public static Product createProduct(User user, ProductCreateRequest request, List<String> imageUrls) {
+        List<Location> locations = request.getLocations().stream()
+                .map(locationDto -> new Location(locationDto.getLocation()))
+                .collect(Collectors.toList());
+
+        List<Image> images = imageUrls.stream()
+                .map(Image::new)
+                .collect(Collectors.toList());
+
+        Product product = new Product(user, request.getTitle(), request.getPrice(),
+                request.getContents(), locations, images);
+
+        locations.forEach(location -> location.updateProduct(product));
+        images.forEach(image -> image.updateProduct(product));
+
+        return product;
+    }
+
 }
