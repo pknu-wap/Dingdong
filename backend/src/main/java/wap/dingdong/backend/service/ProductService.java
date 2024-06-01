@@ -26,11 +26,13 @@ import wap.dingdong.backend.repository.ProductRepository;
 import wap.dingdong.backend.repository.UserRepository;
 import wap.dingdong.backend.repository.WishRepository;
 import wap.dingdong.backend.security.UserPrincipal;
+import wap.dingdong.backend.util.AwsUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +41,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
-    private final AmazonS3 amazonS3;
-    private final S3Config s3Config;
-
+    private final AwsUtils awsUtils;
 
     /*
       상품 등록
@@ -49,87 +49,62 @@ public class ProductService {
     @Transactional
     public void save(UserPrincipal userPrincipal, ProductCreateRequest request) throws IOException {
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
-        List<String> imageUrls = uploadImagesToS3(request.getImageFiles());
-        Product product = createProduct(user, request, imageUrls);
+        List<String> imageUrls = awsUtils.uploadImagesToS3(request.getImageFiles());
+        Product product = Product.createProduct(user, request, imageUrls);
         productRepository.save(product);
     }
 
-    private List<String> uploadImagesToS3(List<MultipartFile> imageFiles) throws IOException {
-        List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile imageFile : imageFiles) {
-            String imageUrl = uploadImageToS3(imageFile);
-            imageUrls.add(imageUrl);
-        }
-        return imageUrls;
-    }
-
-    private String uploadImageToS3(MultipartFile imageFile) throws IOException {
-        String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-        amazonS3.putObject(new PutObjectRequest(s3Config.getBucketName(), fileName, imageFile.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3.getUrl(s3Config.getBucketName(), fileName).toString();
-    }
-
-    private Product createProduct(User user, ProductCreateRequest request, List<String> imageUrls) {
-        List<Location> locations = request.getLocations().stream()
-                .map(locationDto -> new Location(locationDto.getLocation()))
-                .collect(Collectors.toList());
-
-        List<Image> images = imageUrls.stream()
-                .map(imageUrl -> new Image(imageUrl))
-                .collect(Collectors.toList());
-
-        Product product = new Product(user, request.getTitle(), request.getPrice(),
-                request.getContents(), locations, images);
-
-        locations.forEach(location -> location.updateProduct(product));
-        images.forEach(image -> image.updateProduct(product));
-
-        return product;
-    }
-
-
-
-
     //모든 책 리스트 가져오기 (페이지네이션 X)
     public List<ProductInfoResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return ProductsResponse.of(products); //응답 데이터를 던져야 함으로 DTO 로 변환
+        return productRepository.findAll()
+                .stream()
+                .map(ProductInfoResponse::of)
+                .collect(Collectors.toList()); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
     // 페이지네이션 된 책 리스트 가져오기
     public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
         int offset = (page - 1) * size;
-        List<Product> products = productRepository.findAllByOrderByIdDesc()
-                .stream()
-                .skip(offset) //offset 만큼 건너뜀
-                .limit(size) //size 만큼 가져옴
+        List<Product> products = productRepository.findAllByOrderByIdDesc();
+        return products.stream()
+                .skip(offset)
+                .limit(size)
+                .map(ProductInfoResponse::of)
                 .collect(Collectors.toList());
-        return ProductsResponse.of(products);
     }
 
-//    /* ------------- id값에 해당하는 상품 불러오기 -------------- */
-//    public ProductResponse getProduct(Long id) {
-//        Product product = productRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-//        return new ProductResponse(product);
-//    }
+    //상품 이름으로 검색 (페이지네이션)
+    public List<ProductInfoResponse> searchProductsByName(String name, int page, int size) {
+        int offset = (page - 1) * size;
+        List<Product> products = productRepository.searchAllProductsByName(name);
+        return products.stream()
+                .skip(offset)
+                .limit(size)
+                .map(ProductInfoResponse::of)
+                .collect(Collectors.toList());
+    }
 
+    //상품 지역2개로 검색 (페이지네이션)
+    public List<ProductInfoResponse> searchProductsByTwoRegion(String location1, String location2, int page, int size) {
+        int offset = (page - 1) * size;
+        List<Product> products = productRepository.searchAllProductsByTwoRegion(location1, location2);
+        return products.stream()
+                .skip(offset)
+                .limit(size)
+                .map(ProductInfoResponse::of)
+                .collect(Collectors.toList());
+    }
 
-
-    // 댓글 조회
-//    public List<CommentResponse> getAllCommentsForBoard(Long id) {
-//        Product product = productRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-//
-//        List<CommentResponse> responseDtoList = new ArrayList<>();
-//        for (Comment comment : product.getComments()) {
-//            CommentResponse responseDto = new CommentResponse(comment);
-//            responseDtoList.add(responseDto);
-//        }
-//    }
-
-
+    //상품 지역1개로 검색 (페이지네이션)
+    public List<ProductInfoResponse> searchProductsByOneRegion(String location1, int page, int size) {
+        int offset = (page - 1) * size;
+        List<Product> products = productRepository.searchAllProductsByOneRegion(location1);
+        return products.stream()
+                .skip(offset)
+                .limit(size)
+                .map(ProductInfoResponse::of)
+                .collect(Collectors.toList());
+    }
 
 /*
     상품 상세 조회
