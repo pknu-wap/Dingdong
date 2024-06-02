@@ -110,7 +110,6 @@ public class ProductService {
 
     /* ------------- 상품 상태 변경하기  ------------- */
     // status = 0 : 판매중, status = 1 : 판매완료
-
     public ProductResponse changeStatus(Long id, UserPrincipal userPrincipal) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
@@ -137,7 +136,17 @@ public class ProductService {
         //현재 로그인된 유저가 작성한 특정(PathParameter)상품을 가져옴 : 자신이 작성한 상품이 아니면 가져올 수 없음
         Product product = productRepository.findByProductIdAndUser(productId, user.getId());
 
+        //@Transactional 안에서 이루어지므로 DB 에서 가져온 엔티티를 계속 추적하여 변경사항이 있으면 바로 DB 에 반영함, productRepository.save() 가 필요없음
         product.updateProduct(request, imageUrls);
+    }
+
+    //상품 삭제
+    @Transactional
+    public void delete(Long productId, UserPrincipal userPrincipal) {
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+        Product product = productRepository.findByProductIdAndUser(productId, user.getId());
+
+        productRepository.delete(product);
     }
 
     /* ------------- 상품 찜하기  ------------- */

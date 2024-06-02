@@ -107,6 +107,13 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //상품 삭제
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId, @CurrentUser UserPrincipal userPrincipal) {
+        productService.delete(productId, userPrincipal);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
      // 상품 상태(판매여부) 변경하기 기능
     @PostMapping("/product/{productId}/status")
     public ResponseEntity<ProductResponse> changeStatus(@PathVariable Long productId,
