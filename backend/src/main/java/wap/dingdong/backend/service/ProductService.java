@@ -194,6 +194,18 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+
+    /* ------------- 내가 등록한 상품 목록 불러오기  ------------- */
+    @Transactional
+    public List<ProductInfoResponse> getUploadedProducts(UserPrincipal currentUser) {
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Product> products = productRepository.findByUser(user);
+        return products.stream()
+                .map(ProductInfoResponse::of)
+                .collect(Collectors.toList());
+    }
 }
 
 
