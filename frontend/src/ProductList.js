@@ -5,48 +5,50 @@ import "./App.css";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 
+
 // 제품 컴포넌트
 const Product = ({ product }) => {
-    const navigate=useNavigate();
-    const handleProductClick=()=>{
+    const navigate = useNavigate();
+    const handleProductClick = () => {
         console.log("제품상세페이지");
         navigate(`/productdetail/${product.productId}`);
-}
+    };
+
     return (
-      <div className="product" onClick={handleProductClick} style={{ cursor: 'pointer' }} >
-        <img src= {product.images[0]} alt={product.title} />
-        <div className="info">
-          <h3>{product.title}</h3>
-          <p>{product.price}원</p>
-          <p>{product.locations.join(', ')}</p>
-          <p>{product.createdAt}</p>
+        <div className="product" onClick={handleProductClick} style={{ cursor: 'pointer' }}>
+            <img src={product.images[0]?.image} alt={product.title} />
+            <div className="info">
+                <h3>{product.title}</h3>
+                <p>{product.price}원</p>
+                <p>{product.locations.map(loc => loc.location).join(', ')}</p>
+                <p>{product.createdAt}</p>
+            </div>
         </div>
-      </div>
     );
 };
-  
+
 // 그리드 레이아웃 컴포넌트
 const ProductList = ({product,setProduct}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-   
-   
-    
+    const [page, setPage] = useState(1);
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://3.34.122.83:8080/product/list');
+                setLoading(true);
+                const response = await axios.get(`http://3.34.122.83:8080/product/list/recent?page=${page}`);
                 setProduct(response.data.productsResponse);
                 setLoading(false);
-                console.log(response.data.productsResponse);
             } catch (error) {
+                console.error('Error fetching products:', error);
                 setError('상품을 불러오는 중 오류가 발생했습니다.');
                 setLoading(false);
             }
         };
 
         fetchProducts();
-    }, []);
+    }, [page]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -68,21 +70,21 @@ const ProductList = ({product,setProduct}) => {
     return (
         <>
         <Header/>
-
-        <ReactGridLayout isDraggable={false} isResizable={false}layout={layout} cols={4} rowHeight={500} width={1400} >
-            {product.map((product) => (
-              
-                <div key={product.productId} className="product_list"  style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px',cursor: 'pointer'}}>
-
-                    <Product product={product}/>
-                </div>
-            ))}
-        </ReactGridLayout>
+        <div>
+            <ReactGridLayout isDraggable={false} isResizable={false} layout={layout} cols={4} rowHeight={500} width={1400}>
+                {product.map((product) => (
+                    <div key={product.productId} className="product_list" style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px', cursor: 'pointer' }}>
+                        <Product product={product} />
+                    </div>
+                ))}
+            </ReactGridLayout>
+            <div className="pagination">
+                <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
+                <button onClick={() => setPage(page + 1)}>다음</button>
+            </div>
+        </div>
         </>
-        
     );
 };
-  
 
 export default ProductList;
-

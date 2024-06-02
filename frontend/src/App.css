@@ -37,6 +37,13 @@ header .user-options {
 .product_list:hover{
   background-color: lightgrey;
 }
+
+.product img{
+  max-width: 300px; /* 원하는 최대 너비 */
+  max-height: 600px; /* 원하는 최대 높이 */
+  object-fit: cover; /* 이미지의 비율을 유지하면서 크기 조정 */
+  
+}
 .category_click{
 color:#fbdd97;
 }
