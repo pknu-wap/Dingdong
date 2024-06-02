@@ -25,7 +25,7 @@ function App() {
   //       setMessage(message);
   //       });
   //       },[])
-
+  
   useEffect(() => {
     // axios.get(url, config)를 사용하여 GET 요청을 보냅니다.
     axios.get('/demo/hello')
@@ -39,7 +39,6 @@ function App() {
         
   return (
     <div className="App">
-     <Header/>
      <h1 className="App-title">{message}</h1>
      <Routes>
      <Route path="/" element={<ProductList product={product} setProduct={setProduct}/> } />

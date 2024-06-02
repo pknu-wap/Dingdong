@@ -3,7 +3,7 @@ import axios from 'axios';
 import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
 import { useNavigate } from 'react-router-dom';
-
+import Header from './Header';
 
 // 제품 컴포넌트
 const Product = ({ product }) => {
@@ -35,9 +35,10 @@ const ProductList = ({product,setProduct}) => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('/product/list');
+                const response = await axios.get('http://3.34.122.83:8080/product/list');
                 setProduct(response.data.productsResponse);
                 setLoading(false);
+                console.log(response.data.productsResponse);
             } catch (error) {
                 setError('상품을 불러오는 중 오류가 발생했습니다.');
                 setLoading(false);
@@ -65,8 +66,11 @@ const ProductList = ({product,setProduct}) => {
     }));
 
     return (
+        <>
+        <Header/>
+
         <ReactGridLayout isDraggable={false} isResizable={false}layout={layout} cols={4} rowHeight={500} width={1400} >
-            {product&&product.map((product) => (
+            {product.map((product) => (
               
                 <div key={product.productId} className="product_list"  style={{ display: 'flex', justifyContent: 'center', marginLeft:'30px', alignItems:'center', padding:'10px',cursor: 'pointer'}}>
 
@@ -74,6 +78,7 @@ const ProductList = ({product,setProduct}) => {
                 </div>
             ))}
         </ReactGridLayout>
+        </>
         
     );
 };
