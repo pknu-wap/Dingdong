@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import wap.dingdong.backend.domain.User;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
+import wap.dingdong.backend.payload.request.ProductUpdateRequest;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
 import wap.dingdong.backend.payload.response.ProductDetailResponse;
@@ -38,7 +39,7 @@ public class ProductController {
 
     //상품 상세보기
     @GetMapping("/product/{productId}")
-    public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
+    public ResponseEntity<?> getProductDetails(@PathVariable Long productId) {
         ProductDetailResponse response = productService.getProductDetails(productId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -57,7 +58,7 @@ public class ProductController {
     //전체 상품 조회 (페이지네이션)
     // ex) page=1 을보내면  최신순으로 첫번째 에서 8번째까지 상품 목록을 리스트로 반환함 , page=2 는 9번째부터 16번째
     @GetMapping("/product/list/recent")
-    public ResponseEntity<?> findRecentUserBooks(@RequestParam int page) {
+    public ResponseEntity<?> findRecentUserProducts(@RequestParam int page) {
         int size = 8; // 페이지 당 상품의 수
         List<ProductInfoResponse> responses = productService.getRecentPaginatedProducts(page, size);
         ProductsResponse response = new ProductsResponse(responses);
@@ -105,6 +106,20 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //=====================================================================
+
+    //상품 수정
+    @PutMapping("/product/{productId}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long productId,
+                                           @CurrentUser UserPrincipal userPrincipal,
+                                           @RequestPart("images") List<MultipartFile> imageFiles,
+                                           @RequestPart("product") ProductUpdateRequest request) throws IOException {
+        request.setImageFiles(imageFiles);
+        productService.update(productId, userPrincipal, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
 
      // 상품 상태(판매여부) 변경하기 기능
     @PostMapping("/product/{productId}/status")

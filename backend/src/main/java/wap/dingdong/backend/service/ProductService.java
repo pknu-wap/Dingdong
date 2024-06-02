@@ -16,6 +16,7 @@ import wap.dingdong.backend.exception.ResourceNotFoundException;
 import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
+import wap.dingdong.backend.payload.request.ProductUpdateRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
@@ -54,7 +55,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    //모든 책 리스트 가져오기 (페이지네이션 X)
+    //모든 상품 리스트 가져오기 (페이지네이션 X)
     public List<ProductInfoResponse> getAllProducts() {
         return productRepository.findAll()
                 .stream()
@@ -62,7 +63,7 @@ public class ProductService {
                 .collect(Collectors.toList()); //응답 데이터를 던져야 함으로 DTO 로 변환
     }
 
-    // 페이지네이션 된 책 리스트 가져오기
+    // 페이지네이션 된 상품 리스트 가져오기
     public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
         int offset = (page - 1) * size;
         List<Product> products = productRepository.findAllByOrderByIdDesc();
@@ -133,6 +134,18 @@ public class ProductService {
 
         Product changedStatus = productRepository.save(product);
         return ProductResponse.of(changedStatus);
+    }
+
+    //상품 수정
+    @Transactional
+    public void update(Long productId, UserPrincipal userPrincipal, ProductUpdateRequest request) throws IOException {
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+        List<String> imageUrls = awsUtils.uploadImagesToS3(request.getImageFiles());
+
+        //현재 로그인된 유저가 작성한 특정(PathParameter)상품을 가져옴 : 자신이 작성한 상품이 아니면 가져올 수 없음
+        Product product = productRepository.findByProductIdAndUser(productId, user.getId());
+
+        product.updateProduct(request, imageUrls);
     }
 
     /* ------------- 상품 찜하기  ------------- */
