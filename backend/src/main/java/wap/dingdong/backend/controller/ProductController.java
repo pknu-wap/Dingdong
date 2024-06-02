@@ -36,14 +36,6 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-//    // 상품 상세보기
-//    //@GetMapping("/product/{productId}")
-//    public ResponseEntity<ProductResponse> getProductByProductId(@PathVariable Long productId) {
-//        ProductResponse productResponse = productService.getProduct(productId);
-//        return ResponseEntity.ok(productResponse);
-//    }
-
     //상품 상세보기
     @GetMapping("/product/{productId}")
     public ResponseEntity<?> getBookDetails(@PathVariable Long productId) {
@@ -51,7 +43,7 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 전체 상품 조회
+    // 전체 상품 조회 (페이지네이션 X)
     //ProductInfoResponse는 하나의 개별 상품의 정보를 담는 DTO (상품상세 DTO와 비슷)
     //ProductsResponse는 전체 상품 목록을 담는 DTO,
     // 여러 개의 ProductInfoResponse 객체를 리스트 형태로 가짐
@@ -72,7 +64,49 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 상품 상태 변경하기 기능
+    //상품 이름으로 검색
+    @GetMapping("/product/search")
+    public ResponseEntity<?> searchProducts(@RequestParam String title, @RequestParam int page) {
+        int size = 8; // 페이지 당 상품의 수
+        List<ProductInfoResponse> responses = productService.searchProductsByName(title, page, size);
+        ProductsResponse response = new ProductsResponse(responses);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //상품의 지역으로 검색 =====================================================================
+    @GetMapping("/product/search/region")
+    public ResponseEntity<?> searchProducts(
+            @RequestParam String title,
+            @RequestParam(required = false) String location1,
+            @RequestParam(required = false) String location2,
+            @RequestParam int page) {
+
+        if (location1 != null && location2 != null) {
+            return searchTwoRegionProducts(title, location1, location2, page);
+        } else if (location1 != null) {
+            return searchOneRegionProducts(title, location1, page);
+        } else {
+            // 에러
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private ResponseEntity<?> searchTwoRegionProducts(String title, String location1, String location2, int page) {
+        int size = 8; // 페이지 당 상품의 수
+        List<ProductInfoResponse> responses = productService.searchProductsByTwoRegion(title, location1, location2, page, size);
+        ProductsResponse response = new ProductsResponse(responses);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private ResponseEntity<?> searchOneRegionProducts(String title, String location1, int page) {
+        int size = 8; // 페이지 당 상품의 수
+        List<ProductInfoResponse> responses = productService.searchProductsByOneRegion(title, location1, page, size);
+        ProductsResponse response = new ProductsResponse(responses);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    //=====================================================================
+
+     // 상품 상태(판매여부) 변경하기 기능
     @PostMapping("/product/{productId}/status")
     public ResponseEntity<ProductResponse> changeStatus(@PathVariable Long productId,
                                                        @CurrentUser UserPrincipal userPrincipal) {
