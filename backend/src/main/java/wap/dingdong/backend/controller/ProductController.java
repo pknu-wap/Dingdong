@@ -121,8 +121,11 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    /* ------------------ 마이페이지 ------------------ */
+
     // 찜한 상품 목록 조회
-    @GetMapping("/mypage/liked")
+    @GetMapping("/mypage/likes")
     public ResponseEntity<?> getLikedProducts(@CurrentUser UserPrincipal currentUser) {
         List<ProductInfoResponse> likedProducts = productService.getLikedProducts(currentUser)
                 .stream()
@@ -130,6 +133,14 @@ public class ProductController {
                 .collect(Collectors.toList());
 
         ProductsResponse response = new ProductsResponse(likedProducts);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 판매 상품 조회
+    @GetMapping("/mypage/products")
+    public ResponseEntity<?> getMyUploadedProducts(@CurrentUser UserPrincipal currentUser) {
+        List<ProductInfoResponse> uploadedProducts = productService.getUploadedProducts(currentUser);
+        ProductsResponse response = new ProductsResponse(uploadedProducts);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
