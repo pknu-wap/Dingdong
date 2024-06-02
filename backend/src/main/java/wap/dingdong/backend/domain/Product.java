@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
+import wap.dingdong.backend.payload.request.ProductUpdateRequest;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -49,19 +50,13 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Buy buy;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Sell sell;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Wish> wishes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Location> locations = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -122,5 +117,32 @@ public class Product {
 
         return product;
     }
+
+    public void updateProduct(ProductUpdateRequest request, List<String> imageUrls) {
+        this.title = request.getTitle();
+        this.price = request.getPrice();
+        this.contents = request.getContents();
+
+        // 기존 이미지 및 지역 초기화 (리스트이므로 여러개가 다 수정되지 않으면 꼬일 수 있어서)
+        this.locations.clear();
+        this.images.clear();
+
+        // 새로운 위치 정보 추가
+        List<Location> newLocations = request.getLocations().stream()
+                .map(locationDto -> new Location(locationDto.getLocation()))
+                .collect(Collectors.toList());
+        newLocations.forEach(location -> location.updateProduct(this));
+        this.locations.addAll(newLocations);
+
+        // 새로운 이미지 정보 추가
+        List<Image> newImages = imageUrls.stream()
+                .map(Image::new)
+                .collect(Collectors.toList());
+        newImages.forEach(image -> image.updateProduct(this));
+        this.images.addAll(newImages);
+    }
+
+
+
 
 }

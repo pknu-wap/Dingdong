@@ -16,6 +16,7 @@ import wap.dingdong.backend.exception.ResourceNotFoundException;
 import wap.dingdong.backend.payload.ImageDto;
 import wap.dingdong.backend.payload.request.CommentRequest;
 import wap.dingdong.backend.payload.request.ProductCreateRequest;
+import wap.dingdong.backend.payload.request.ProductUpdateRequest;
 import wap.dingdong.backend.payload.response.CommentResponse;
 import wap.dingdong.backend.payload.response.ProductInfoResponse;
 import wap.dingdong.backend.payload.response.ProductResponse;
@@ -54,15 +55,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    //모든 책 리스트 가져오기 (페이지네이션 X)
-    public List<ProductInfoResponse> getAllProducts() {
-        return productRepository.findAll()
-                .stream()
-                .map(ProductInfoResponse::of)
-                .collect(Collectors.toList()); //응답 데이터를 던져야 함으로 DTO 로 변환
-    }
-
-    // 페이지네이션 된 책 리스트 가져오기
+    // 페이지네이션 된 상품 리스트 가져오기
     public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
         int offset = (page - 1) * size;
         List<Product> products = productRepository.findAllByOrderByIdDesc();
@@ -117,7 +110,6 @@ public class ProductService {
 
     /* ------------- 상품 상태 변경하기  ------------- */
     // status = 0 : 판매중, status = 1 : 판매완료
-
     public ProductResponse changeStatus(Long id, UserPrincipal userPrincipal) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
@@ -133,6 +125,28 @@ public class ProductService {
 
         Product changedStatus = productRepository.save(product);
         return ProductResponse.of(changedStatus);
+    }
+
+    //상품 수정
+    @Transactional
+    public void update(Long productId, UserPrincipal userPrincipal, ProductUpdateRequest request) throws IOException {
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+        List<String> imageUrls = awsUtils.uploadImagesToS3(request.getImageFiles());
+
+        //현재 로그인된 유저가 작성한 특정(PathParameter)상품을 가져옴 : 자신이 작성한 상품이 아니면 가져올 수 없음
+        Product product = productRepository.findByProductIdAndUser(productId, user.getId());
+
+        //@Transactional 안에서 이루어지므로 DB 에서 가져온 엔티티를 계속 추적하여 변경사항이 있으면 바로 DB 에 반영함, productRepository.save() 가 필요없음
+        product.updateProduct(request, imageUrls);
+    }
+
+    //상품 삭제
+    @Transactional
+    public void delete(Long productId, UserPrincipal userPrincipal) {
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+        Product product = productRepository.findByProductIdAndUser(productId, user.getId());
+
+        productRepository.delete(product);
     }
 
     /* ------------- 상품 찜하기  ------------- */
@@ -158,29 +172,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    @Transactional
-    public List<Product> getLikedProducts(UserPrincipal currentUser) {
-        User user = userRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Wish> wishes = wishRepository.findByUserAndLiked(user, 1);
-        return wishes.stream()
-                .map(Wish::getProduct)
-                .collect(Collectors.toList());
-    }
-
-
-    /* ------------- 내가 등록한 상품 목록 불러오기  ------------- */
-    @Transactional
-    public List<ProductInfoResponse> getUploadedProducts(UserPrincipal currentUser) {
-        User user = userRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Product> products = productRepository.findByUser(user);
-        return products.stream()
-                .map(ProductInfoResponse::of)
-                .collect(Collectors.toList());
-    }
 }
 
 
