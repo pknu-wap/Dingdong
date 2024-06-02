@@ -55,14 +55,6 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    //모든 상품 리스트 가져오기 (페이지네이션 X)
-    public List<ProductInfoResponse> getAllProducts() {
-        return productRepository.findAll()
-                .stream()
-                .map(ProductInfoResponse::of)
-                .collect(Collectors.toList()); //응답 데이터를 던져야 함으로 DTO 로 변환
-    }
-
     // 페이지네이션 된 상품 리스트 가져오기
     public List<ProductInfoResponse> getRecentPaginatedProducts(int page, int size) {
         int offset = (page - 1) * size;
@@ -171,29 +163,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    @Transactional
-    public List<Product> getLikedProducts(UserPrincipal currentUser) {
-        User user = userRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Wish> wishes = wishRepository.findByUserAndLiked(user, 1);
-        return wishes.stream()
-                .map(Wish::getProduct)
-                .collect(Collectors.toList());
-    }
-
-
-    /* ------------- 내가 등록한 상품 목록 불러오기  ------------- */
-    @Transactional
-    public List<ProductInfoResponse> getUploadedProducts(UserPrincipal currentUser) {
-        User user = userRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Product> products = productRepository.findByUser(user);
-        return products.stream()
-                .map(ProductInfoResponse::of)
-                .collect(Collectors.toList());
-    }
 }
 
 

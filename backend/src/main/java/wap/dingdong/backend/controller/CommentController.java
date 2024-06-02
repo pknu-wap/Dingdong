@@ -20,12 +20,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-//    // 댓글 조회 (상품 상세 조회가 댓글 조회임으로 제외)
-//    @GetMapping("/product/{productId}/comment")
-//    public ResponseEntity<List<CommentResponse>> getAllCommentsForBoard(@PathVariable Long productId) {
-//        List<CommentResponse> comments = productService.getAllCommentsForBoard(productId);
-//        return ResponseEntity.ok(comments);
-//    }
     // 댓글 생성
     @PostMapping("/product/{productId}/comment")
     public ResponseEntity<CommentResponse> createComment(

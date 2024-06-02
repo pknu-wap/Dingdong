@@ -44,17 +44,6 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 전체 상품 조회 (페이지네이션 X)
-    //ProductInfoResponse는 하나의 개별 상품의 정보를 담는 DTO (상품상세 DTO와 비슷)
-    //ProductsResponse는 전체 상품 목록을 담는 DTO,
-    // 여러 개의 ProductInfoResponse 객체를 리스트 형태로 가짐
-    @GetMapping("/product/list")
-    public ResponseEntity<?> findAllProducts() {
-        List<ProductInfoResponse> products = productService.getAllProducts();
-        ProductsResponse response = new ProductsResponse(products);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     //전체 상품 조회 (페이지네이션)
     // ex) page=1 을보내면  최신순으로 첫번째 에서 8번째까지 상품 목록을 리스트로 반환함 , page=2 는 9번째부터 16번째
     @GetMapping("/product/list/recent")
@@ -118,9 +107,6 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
-
      // 상품 상태(판매여부) 변경하기 기능
     @PostMapping("/product/{productId}/status")
     public ResponseEntity<ProductResponse> changeStatus(@PathVariable Long productId,
@@ -137,26 +123,5 @@ public class ProductController {
     }
 
 
-    /* ------------------ 마이페이지 ------------------ */
-
-    // 찜한 상품 목록 조회
-    @GetMapping("/mypage/likes")
-    public ResponseEntity<?> getLikedProducts(@CurrentUser UserPrincipal currentUser) {
-        List<ProductInfoResponse> likedProducts = productService.getLikedProducts(currentUser)
-                .stream()
-                .map(ProductInfoResponse::of)
-                .collect(Collectors.toList());
-
-        ProductsResponse response = new ProductsResponse(likedProducts);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    // 판매 상품 조회
-    @GetMapping("/mypage/products")
-    public ResponseEntity<?> getMyUploadedProducts(@CurrentUser UserPrincipal currentUser) {
-        List<ProductInfoResponse> uploadedProducts = productService.getUploadedProducts(currentUser);
-        ProductsResponse response = new ProductsResponse(uploadedProducts);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
 }

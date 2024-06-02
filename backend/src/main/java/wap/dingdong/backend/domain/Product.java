@@ -50,12 +50,6 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Buy buy;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Sell sell;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Wish> wishes = new ArrayList<>();
 

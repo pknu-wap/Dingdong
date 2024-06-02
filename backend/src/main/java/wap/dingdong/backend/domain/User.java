@@ -51,19 +51,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Wish> wishList = new ArrayList<>();
 
-    public List<Product> getLikedProducts() {
-        return wishList.stream()
-                .map(Wish::getProduct)
-                .collect(Collectors.toList());
-    }
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Sell> sells = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    List<Buy> buys = new ArrayList<>();
-
 
 }
