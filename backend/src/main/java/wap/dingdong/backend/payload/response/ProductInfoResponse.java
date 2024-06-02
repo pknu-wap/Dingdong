@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 public class ProductInfoResponse {
 
-    private String email;
+    private String userName;
     private Long productId;
     private String title;
     private Long price;
@@ -31,7 +31,7 @@ public class ProductInfoResponse {
 
     public static ProductInfoResponse of(Product product) {
         return new ProductInfoResponse(
-                product.getUser().getEmail(), //연관관계가 연결되어 있으므로 이렇게 조회 가능
+                product.getUser().getName(), //연관관계가 연결되어 있으므로 이렇게 조회 가능
                 product.getId(),
                 product.getTitle(),
                 product.getPrice(),
