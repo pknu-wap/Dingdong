@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 
+
 const Mypage = () => {
   const [selectedTab, setSelectedTab] = useState('salesHistory');
 

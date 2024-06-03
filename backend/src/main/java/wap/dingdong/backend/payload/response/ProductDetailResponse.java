@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor @NoArgsConstructor
 public class ProductDetailResponse {
 
-    private String email;
+    private String userName;
     private Long productId;
     private String title;
     private Long price;
@@ -24,13 +24,13 @@ public class ProductDetailResponse {
     private List<LocationDto> locations;
     private Integer status;
     private List<ImageDto> images;
-    private Integer productLike;
+    private Integer liked;
     private LocalDateTime createdAt;
     private List<CommentDto> comment;
 
     public static ProductDetailResponse of(Product product) {
         return new ProductDetailResponse(
-                product.getUser().getEmail(),
+                product.getUser().getName(),
                 product.getId(),
                 product.getTitle(),
                 product.getPrice(),
@@ -42,11 +42,11 @@ public class ProductDetailResponse {
                 product.getImages().stream()
                                 .map(image -> new ImageDto(image.getImage()))
                                 .collect(Collectors.toList()),
-                product.getProductLike(),
+                product.getLiked(),
                 product.getCreatedAt(),
                 product.getComments().stream()
                         .map(comment -> new CommentDto(comment.getCmtId(),comment.getUser().getId(),
-                                comment.getUser().getEmail(), comment.getCmtContent(), comment.getCmtRegDate()))
+                                comment.getUser().getName(), comment.getCmtContent(), comment.getCmtRegDate()))
                         .collect(Collectors.toList())
         );
     }

@@ -4,6 +4,7 @@ import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
 import { useNavigate } from 'react-router-dom';
 
+
 // 제품 컴포넌트
 const Product = ({ product }) => {
     const navigate = useNavigate();
@@ -38,7 +39,9 @@ const ProductList = () => {
                 setLoading(true);
                 const response = await axios.get(`http://3.34.122.83:8080/product/list/recent?page=${page}`);
                 setProducts(response.data.productsResponse);
+
                 setLoading(false);
+                console.log(response.data.productsResponse);
             } catch (error) {
                 console.error('Error fetching products:', error);
                 setError('상품을 불러오는 중 오류가 발생했습니다.');
@@ -80,6 +83,7 @@ const ProductList = () => {
                 <button onClick={() => setPage(page + 1)}>다음</button>
             </div>
         </div>
+
     );
 };
 

@@ -15,6 +15,7 @@ public class CommentResponse {
     private LocalDateTime cmtRegDate;
     private Long userId;
     private Long productId;
+    private String userName;
 
     // Entity -> Dto
     public CommentResponse(Comment comment) {
@@ -23,5 +24,6 @@ public class CommentResponse {
         this.cmtRegDate = comment.getCmtRegDate();
         this.userId = comment.getUser().getId();
         this.productId = comment.getProduct().getId();
+        this.userName = comment.getUser().getName();
     }
 }
