@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
-
+import Header from './Header'
 
 const Mypage = () => {
   const [selectedTab, setSelectedTab] = useState('salesHistory');
@@ -66,6 +66,9 @@ const SalesHistory = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
+    <>
+    <Header/>
+    
     <div>
       <h2>판매 내역</h2>
       <ul>
@@ -76,6 +79,7 @@ const SalesHistory = () => {
         ))}
       </ul>
     </div>
+    </>
   );
 };
 

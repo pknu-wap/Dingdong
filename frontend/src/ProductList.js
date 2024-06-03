@@ -3,6 +3,7 @@ import axios from 'axios';
 import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 
 // 제품 컴포넌트
@@ -27,8 +28,7 @@ const Product = ({ product }) => {
 };
 
 // 그리드 레이아웃 컴포넌트
-const ProductList = () => {
-    const [products, setProducts] = useState([]);
+const ProductList = ({product,setProduct}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
@@ -38,10 +38,8 @@ const ProductList = () => {
             try {
                 setLoading(true);
                 const response = await axios.get(`http://3.34.122.83:8080/product/list/recent?page=${page}`);
-                setProducts(response.data.productsResponse);
-
+                setProduct(response.data.productsResponse);
                 setLoading(false);
-                console.log(response.data.productsResponse);
             } catch (error) {
                 console.error('Error fetching products:', error);
                 setError('상품을 불러오는 중 오류가 발생했습니다.');
@@ -61,7 +59,7 @@ const ProductList = () => {
     }
 
     // 그리드 레이아웃 설정
-    const layout = products.map((product, index) => ({
+    const layout = product.map((product, index) => ({
         i: `${product.productId}`, // 고유한 ID로 사용
         x: index % 4, // 열 위치 계산 (한 줄에 4개씩)
         y: Math.floor(index / 4), // 행 위치 계산
@@ -70,9 +68,11 @@ const ProductList = () => {
     }));
 
     return (
+        <>
+        <Header/>
         <div>
             <ReactGridLayout isDraggable={false} isResizable={false} layout={layout} cols={4} rowHeight={500} width={1400}>
-                {products.map((product) => (
+                {product.map((product) => (
                     <div key={product.productId} className="product_list" style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px', cursor: 'pointer' }}>
                         <Product product={product} />
                     </div>
@@ -83,7 +83,7 @@ const ProductList = () => {
                 <button onClick={() => setPage(page + 1)}>다음</button>
             </div>
         </div>
-
+        </>
     );
 };
 
