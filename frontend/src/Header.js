@@ -1,12 +1,12 @@
 import React,{useState,useCallback, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Cookies from 'js-cookie';
-
+import axios from 'axios';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Link,useNavigate } from "react-router-dom";
+import { Route,Routes,Link,useNavigate } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Logo from './dummy/dingdong로고.png';
@@ -17,17 +17,53 @@ import './App.css';
 const Header = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태를 관리하기 위한 상태값
   const[showLogin,setShowLogin]=useState(false);
-  const[ishover,setishover]=useState(new Array(3).fill(false));
+  const [selectedRegion, setSelectedRegion] = useState([]); // 선택된 지역을 관리하는 상태값
   const [userName, setUserName] = useState(null);
-
+  const[category1,setCategory1]=useState(false);
+  const[category2,setCategory2]=useState(false);
+  const[category3,setCategory3]=useState(false);
   let navigate=useNavigate();
   const handleMapIconClick = () => {
     setShowModal(true); // 모달 열기
   };
- 
- const[category1,setCategory1]=useState(false);
- const[category2,setCategory2]=useState(false);
- const[category3,setCategory3]=useState(false);
+  const handleRegionClick = (region) => {
+    if (region === '전체 선택') {
+      setSelectedRegion(['강서구', '금정구', '기장군', '남구', '동구', '동래구', '진구', '북구', '사상구', '사하구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구']);
+    } else if (region === '전체 해제') {
+      setSelectedRegion([]);
+    } else {
+      setSelectedRegion(prev => {
+        if (prev.includes(region)) {
+          return prev.filter(r => r !== region);
+        } else {
+          return [...prev, region];
+        }
+      });
+    }
+    console.log("선택된 지역:", selectedRegion);
+  };
+
+  const fetchFilteredProducts = async () => {
+    try {
+      const response = await axios.get('/GET/product/search/region', {
+        params: {
+          page: 1,
+          title: '',
+          location1: selectedRegion[0] || '',
+          location2: selectedRegion[1] || '',
+        }
+      });
+      console.log("필터링된 상품:", response.data);
+    } catch (error) {
+      console.error("API 요청 에러:", error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    fetchFilteredProducts(); // 모달이 닫힐 때 API 요청을 보냅니다.
+  };
+
  useEffect(() => {
   if (category1) {
     navigate('/productlist');
@@ -163,20 +199,36 @@ const fetchUserInfo = (token) => {
        
       </Container>
     </Navbar>
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
+    <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>지역 선택</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* 지역 선택 내용을 추가 */}
-          <p>지역을 선택하세요.</p>
-          {/* 지역 선택 UI 추가 */}
+          <div className="region-buttons">
+            <Button variant="light" size="sm" onClick={() => handleRegionClick('전체 선택')}>전체 선택</Button>
+            <Button variant="light" size="sm" onClick={() => handleRegionClick('전체 해제')}>전체 해제</Button>
+            <Button variant="light" size="sm" onClick={() => handleRegionClick('강서구')}>강서구</Button>
+            <Button variant="light" size="sm" onClick={() => handleRegionClick('금정구')}>금정구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('기장군')}>기장군</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('남구')}>남구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('동구')}>동구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('동래구')}>동래구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('진구')}>진구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('북구')}>북구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('사상구')}>사상구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('사하구')}>사하구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('서구')}>서구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('수영구')}>수영구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('연제구')}>연제구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('영도구')}>영도구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('중구')}>중구</Button>
+            <Button variant='light' size='sm' onClick={() => handleRegionClick('해운대구')}>해운대구</Button>
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={handleCloseModal}>
             닫기
           </Button>
-          {/* 선택 완료 버튼 등을 추가할 수 있음 */}
         </Modal.Footer>
       </Modal>
      

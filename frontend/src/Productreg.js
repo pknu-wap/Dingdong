@@ -36,6 +36,7 @@ function Productreg() {
   const [imageFiles, setImageFiles] = useState([]); // 이미지 파일을 저장할 상태 추가
   const [response_reg, setResponse_reg] = useState(null);
   const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue2, setSelectedValue2] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +57,8 @@ function Productreg() {
         price: parseInt(price, 10), // 가격을 숫자로 변환
         contents: productdetail,
         locations: [
-          { location: selectedValue }
+          { location: selectedValue},
+          { location:selectedValue2}
         ]
       };
       formData.append('product', new Blob([JSON.stringify(productData)], { type: 'application/json' }));
@@ -70,10 +72,12 @@ function Productreg() {
       };
 
       const response = await axios.post(url, formData, { headers });
-      setResponse_reg(response.data);
-      console.log(response_reg);
+     console.log(response.data);
+     alert('상품등록에 성공했습니다.');
+     navigate('/');
     } catch (error) {
       console.error(error);
+      alert('상품등록에 실패했습니다.');
     }
   };
 
@@ -124,7 +128,9 @@ function Productreg() {
           </Form.Label>
           <Col>
             <Selectregion selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
+            <Selectregion selectedValue={selectedValue2} setSelectedValue={setSelectedValue2} />
           </Col>
+  
         </Row>
       </Container>
       <div style={{ borderTop: '1px solid #000', marginLeft: '30px', marginTop: '20px' }}></div>
@@ -137,12 +143,13 @@ function Productreg() {
 function Selectregion({ selectedValue, setSelectedValue }) {
   const handleChange = (e) => {
     setSelectedValue(e.currentTarget.value);
+    console.log(selectedValue);
   };
 
   return (
     <select onChange={handleChange} value={selectedValue} style={{ marginTop: "5px" }}>
       {OPTIONS.map((option) => (
-        <option key={option.value} value={option.value}>{option.label}</option>
+        <option key={option.value} value={option.label}>{option.label}</option>
       ))}
     </select>
   );
@@ -152,7 +159,7 @@ const ImageUpload = ({ uploadImgUrls, setUploadImgUrls, setImageFiles }) => {
   const onchangeImageUpload = (e) => {
     const { files } = e.target;
     const uploadFiles = Array.from(files);
-    setImageFiles(uploadFiles); // 이미지 파일 상태 업데이트
+    setImageFiles(prevFiles => [...prevFiles, ...uploadFiles]);
     const newImgUrls = uploadFiles.map(file => URL.createObjectURL(file));
     setUploadImgUrls(prevUrls => [...prevUrls, ...newImgUrls]); // URL 상태 업데이트
   };
