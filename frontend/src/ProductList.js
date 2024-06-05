@@ -15,8 +15,8 @@ const Product = ({ product }) => {
     };
     const dateStr = product.createdAt; // 주어진 UTC 시간
     const date = new Date(dateStr);
-    // 한국 시간(KST)으로 변환 (UTC+9)
-    const kstOffset = 9 * 60; // KST는 UTC+9
+    // 한국 시간(KST)으로 변환
+    const kstOffset = 9 * 60;
     const kstDate = new Date(date.getTime() + kstOffset * 60 * 1000);
     
     const year = kstDate.getFullYear();
@@ -25,9 +25,9 @@ const Product = ({ product }) => {
     const hours = String(kstDate.getHours()).padStart(2, '0');
     const minutes = String(kstDate.getMinutes()).padStart(2, '0');
     
-    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;  //fromattedDate는 변환된 한국시간
     
-    console.log(formattedDate); // 예: "2024-06-03-14-38"
+    console.log(formattedDate); // 예: "2024-06-03 14:38"
 
     return (
         <div className="product" onClick={handleProductClick} style={{ cursor: 'pointer' }}>
@@ -36,10 +36,10 @@ const Product = ({ product }) => {
                 <h3>{product.title}</h3>
                 <p>{product.price}원</p>
                 <p>{product.locations.map(loc => loc.location).join(', ')}</p>
-                <p>{formattedDate}</p>
-                {product.status==1 ? <div className="label">판매완료</div>:null}
-            </div>
-        </div>
+                <p>{formattedDate}</p>  
+                {product.status==1 ? <div className="label">판매완료</div>:null}   
+            </div>                     
+        </div>                              //product.status가 1이면 판매완료된 상품이므로 판매완료라벨 표시
     );
 };
 

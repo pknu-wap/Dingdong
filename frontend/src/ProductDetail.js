@@ -18,14 +18,14 @@ const FavoriteButton = ({id,totalLike,setTotalLike}) => {                       
       const token = Cookies.get('authToken');
       console.log('Token:', token);
       if (!token) {
-        throw new Error('No auth token found');
+        throw new Error('로그인후 이용해주세요');
     }
       const headers={ 'Authorization': `Bearer ${token}`};
       const url=`http://3.34.122.83:8080/product/${id}/like`;
-      const response=await axios.post(url,{},{headers});
+      const response=await axios.post(url,{},{headers});           //좋아요 요청
       const response2= await axios.get(`http://3.34.122.83:8080/product/${id}`,{headers});
-      setTotalLike(response2.data.liked);
-    setIsFavorited(!isFavorited);
+      setTotalLike(response2.data.liked);    //찜하기 버튼클릭후 총좋아요개수 불러온뒤 업데이트
+    setIsFavorited(!isFavorited);             //좋아요 상태표시 업데이트
     }catch(error){
       console.error(error);
       alert("좋아요 실패");
@@ -34,11 +34,11 @@ const FavoriteButton = ({id,totalLike,setTotalLike}) => {                       
   };
 
   return (
-    <button 
+    <button                                       //좋아요 상태에따라 하트 색상변화
       className={`favorite-button ${isFavorited ? 'favorited' : ''}`} 
-      onClick={handleFavoriteClick}
+      onClick={handleFavoriteClick}                   
     >
-      <i className={`fas fa-heart ${isFavorited ? 'active' : ''}`}></i>
+      <i className={`fas fa-heart ${isFavorited ? 'active' : ''}`}></i>         
     </button>
   );
 };
@@ -73,15 +73,15 @@ const ImageSlider = ({imageDummy}) => {
     );
   };
 
-const ProductDetail=({product,setProduct})=>{
+const ProductDetail=({product,setProduct})=>{                     //상품상세페이지 컴포넌트
 let {id}=useParams();                           //현재페이지 url의 id찾기
-let detailproduct=product.find(function(x){
+let detailproduct=product.find(function(x){           //detailproduct 는 현재페이지의 상품id를 가진 객체
 return x.productId==id;
 });
 const navigate=useNavigate();
 const [totalLike,setTotalLike]=useState(detailproduct.liked);
 const [regStatus,setRegStatus]=useState(detailproduct.status);
-/*const delet_product=async()=>{
+/*const delet_product=async()=>{                         //상품 삭제 함수
 try{
     const token=Cookies.get('authToken');
     const url=`http://3.34.122.83:8080/product/${id}`;
