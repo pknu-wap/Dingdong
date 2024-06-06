@@ -50,7 +50,8 @@ public class ProductController {
     public ResponseEntity<?> findRecentUserProducts(@RequestParam int page) {
         int size = 8; // 페이지 당 상품의 수
         List<ProductInfoResponse> responses = productService.getRecentPaginatedProducts(page, size);
-        ProductsResponse response = new ProductsResponse(responses);
+        int total = productService.getTotal();
+        ProductsResponse response = new ProductsResponse(responses, total);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -59,7 +60,8 @@ public class ProductController {
     public ResponseEntity<?> searchProducts(@RequestParam String title, @RequestParam int page) {
         int size = 8; // 페이지 당 상품의 수
         List<ProductInfoResponse> responses = productService.searchProductsByName(title, page, size);
-        ProductsResponse response = new ProductsResponse(responses);
+        int total = productService.getTotal();
+        ProductsResponse response = new ProductsResponse(responses, total);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -84,14 +86,16 @@ public class ProductController {
     private ResponseEntity<?> searchTwoRegionProducts(String title, String location1, String location2, int page) {
         int size = 8; // 페이지 당 상품의 수
         List<ProductInfoResponse> responses = productService.searchProductsByTwoRegion(title, location1, location2, page, size);
-        ProductsResponse response = new ProductsResponse(responses);
+        int total = productService.getTotal();
+        ProductsResponse response = new ProductsResponse(responses, total);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private ResponseEntity<?> searchOneRegionProducts(String title, String location1, int page) {
         int size = 8; // 페이지 당 상품의 수
         List<ProductInfoResponse> responses = productService.searchProductsByOneRegion(title, location1, page, size);
-        ProductsResponse response = new ProductsResponse(responses);
+        int total = productService.getTotal();
+        ProductsResponse response = new ProductsResponse(responses, total);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //=====================================================================
