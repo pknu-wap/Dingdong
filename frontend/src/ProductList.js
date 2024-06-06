@@ -5,7 +5,6 @@ import "./App.css";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 
-
 // 제품 컴포넌트
 const Product = ({ product }) => {
     const navigate = useNavigate();
@@ -45,16 +44,20 @@ const Product = ({ product }) => {
 
 
 // 그리드 레이아웃 컴포넌트
-const ProductList = ({product,setProduct}) => {
+const ProductList = ({ product, setProduct }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
                 const response = await axios.get(`http://3.34.122.83:8080/product/list/recent?page=${page}`);
                 setProduct(response.data.productsResponse);
+                setTotalPages(response.data.totalPages); // assuming the API response includes totalPages
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -64,7 +67,7 @@ const ProductList = ({product,setProduct}) => {
         };
 
         fetchProducts();
-    }, [page]);
+    }, [page, setProduct]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -94,12 +97,10 @@ const ProductList = ({product,setProduct}) => {
                     </div>
                 ))}
             </ReactGridLayout>
-            
-            <div className="pagination">
-                <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
-                <button onClick={() => setPage(page + 1)}>다음</button>
-            </div>
-        </div>
+             <div className="pagination">
+                    <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
+                    <button onClick={() => setPage(page + 1)} disabled={page >= totalPages}>다음</button>
+             </div>
         </>
     );
 };

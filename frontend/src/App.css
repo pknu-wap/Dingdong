@@ -1,3 +1,8 @@
+/* 기존 스타일 */
+body {
+  font-family: Arial, sans-serif;
+}
+
 .app {
   text-align: center; /* 요소들을 가운데 정렬 */
 }
@@ -10,18 +15,18 @@ header {
 header .Logo {
   display: flex; /* Logo 내의 요소들을 가로로 나열하기 위해 Flexbox 적용 */
   align-items: center; /* 요소들을 수직 가운데 정렬 */
-  font-size : 30px;
-  font-weight : bold;
-  font-style : normal;
+  font-size: 30px;
+  font-weight: bold;
+  font-style: normal;
 }
-.header-size{
-margin-top:50px;
-margin-bottom:30px;
-margin-left:100px;
+.header-size {
+  margin-top: 50px;
+  margin-bottom: 30px;
+  margin-left: 100px;
 }
-.nav-bar{
-  color:#fbdd97
- }
+.nav-bar {
+  color: #fbdd97;
+}
 header .search-bar {
   flex-grow: 1; /* 검색 바를 나머지 공간을 모두 차지하도록 설정 */
   margin: 0 20px; /* 좌우 여백 추가 */
@@ -31,9 +36,10 @@ header .location-selector,
 header .user-options {
   margin-left: 20px; /* 아이콘과 버튼 사이 여백 추가 */
 }
-.icon:hover{              /* 지도에 마우스올릴시 색상변화*/
+.icon:hover { /* 지도에 마우스 올릴 시 색상 변화 */
   filter: invert(26%) sepia(99%) saturate(1246%) hue-rotate(92deg) brightness(99%) contrast(106%);
 }
+
 .product_list.hover{
   background-color: lightgrey;
 }
@@ -50,6 +56,7 @@ header .user-options {
 .category_click{
 color:#fbdd97;
 }
+
 .slider-container {
   position: relative;
   width: 100%; /* 이미지의 가로 크기 조정 */
@@ -70,6 +77,7 @@ color:#fbdd97;
 .slick-dots li {
   margin: 0 5px;
 }
+
 
 .slick-dots button:before {
   font-size: 12px;
@@ -127,6 +135,11 @@ color:#fbdd97;
 .product-description p {
   line-height: 1.6;
 }
+  
+.product-comment {
+  flex: 1;
+}
+
 .comment-section {
   margin-top: 20px;
 }
@@ -147,26 +160,90 @@ color:#fbdd97;
     border-radius: 5px; /* 둥근 모서리 */
     font-weight: bold; /* 글꼴 두껍게 */
   }
+
 /* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조절 */
 @media (max-width: 768px) {
   /* 화면 너비가 768px 이하일 때 적용되는 스타일 */
   header {
-    text-align: center; /* 텍스트 가운데 정렬 */
+      text-align: center; /* 텍스트 가운데 정렬 */
   }
 
   header .Logo {
-    margin-bottom: 20px; /* 로고 아래 여백 추가 */
+      margin-bottom: 20px; /* 로고 아래 여백 추가 */
   }
 
   header .search-bar {
-    margin: 20px 0; /* 검색 바 위아래 여백 추가 */
+      margin: 20px 0; /* 검색 바 위아래 여백 추가 */
   }
- 
+
   header .location-selector,
   header .user-options {
-    margin-left: 0; /* 아이콘과 버튼 여백 제거 */
+      margin-left: 0; /* 아이콘과 버튼 여백 제거 */
   }
 }
+
+.product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+}
+
+.product img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.info {
+  text-align: left;
+  margin-top: 12px;
+  width: 100%; /* 전체 너비를 차지하게 설정 */
+}
+
+.info h3 {
+  margin: 8px 0;
+}
+
+.info p {
+  margin: 4px 0;
+  color: #555;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
 .favorite-button {
   background: none;
   border: none;

@@ -45,7 +45,7 @@ function App() {
      <Route path="/productlist" element={<ProductList product={product}setProduct={setProduct} /> } />
      <Route path="/productreg" element={<Productreg/>}/>
      <Route path="/mypage" element={<Mypage/> } />
-      <Route path="/productdetail/:id" element={<ProductDetail product={product}setProduct={setProduct} />}/>
+     <Route path="/productdetail/:id" element={<ProductDetail product={product}setProduct={setProduct} />}/>
      </Routes>
     </div>
   );

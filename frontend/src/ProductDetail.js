@@ -88,11 +88,14 @@ try{
     const headers={ 'Authorization': `Bearer ${token}`};
     const response=await axios.delete(url,{headers});
     console.log(response.data);
-    alert('상품이 삭제되었습니다.');
-      navigate('/'); // 삭제 후 홈 페이지로 이동
+
+    alert('상품이 정상적으로 삭제되었습니다.');
+      navigate('/'); // 예: 삭제 후 홈 페이지로 이동
+/'); // 삭제 후 홈 페이지로 이동
+
 }catch(error){
     console.error(error);
-      alert('상품 삭제에 실패했습니다.');
+      alert('본인이 올린 상품만 삭제가 가능합니다.');
 }
 };*/
 const statusChangeHandler= async()=>{
