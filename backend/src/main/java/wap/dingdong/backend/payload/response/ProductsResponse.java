@@ -10,12 +10,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProductsResponse{
 
     private List<ProductInfoResponse> productsResponse;
+    private int pageCount;
 
+    public ProductsResponse(List<ProductInfoResponse> productsResponse) {
+        this.productsResponse = productsResponse;
+    }
 
+    public ProductsResponse(List<ProductInfoResponse> productsResponse, int pageCount) {
+        if (pageCount % 8 != 0) {
+            this.pageCount = (pageCount / 8) + 1;
+        } else {
+            this.pageCount = pageCount / 8;
+        }
+        this.productsResponse = productsResponse;
 
+    }
 }

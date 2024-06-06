@@ -47,6 +47,12 @@ public class ProductService {
     /*
       상품 등록
    */
+
+    public int getTotal() {
+        List<Product> products = productRepository.findAllByOrderByIdDesc();
+        return products.size();
+    }
+
     @Transactional
     public void save(UserPrincipal userPrincipal, ProductCreateRequest request) throws IOException {
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
