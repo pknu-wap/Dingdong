@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor @NoArgsConstructor
 public class ProductDetailResponse {
 
+    private Long userId;
     private String userName;
     private Long productId;
     private String title;
@@ -30,6 +31,7 @@ public class ProductDetailResponse {
 
     public static ProductDetailResponse of(Product product) {
         return new ProductDetailResponse(
+                product.getUser().getId(),
                 product.getUser().getName(),
                 product.getId(),
                 product.getTitle(),

@@ -39,38 +39,71 @@ header .user-options {
 .icon:hover { /* 지도에 마우스 올릴 시 색상 변화 */
   filter: invert(26%) sepia(99%) saturate(1246%) hue-rotate(92deg) brightness(99%) contrast(106%);
 }
-.product_list:hover {
+
+.product_list.hover{
   background-color: lightgrey;
 }
-.category_click {
-  color: #fbdd97;
+.product_list:hover{
+  background-color: lightgrey;
+}
+
+.product img{
+  width: 300px; /* 원하는 최대 너비 */
+  height: 310px; /* 원하는 최대 높이 */
+  object-fit: contain; /* 이미지의 비율을 유지하면서 크기 조정 */
+  
+}
+.category_click{
+color:#fbdd97;
+}
+
+.slider-container {
+  position: relative;
+  width: 100%; /* 이미지의 가로 크기 조정 */
+  height:100%;
+  margin: 0; /* 좌측 정렬 */
+}
+.slick-dots {
+  position: absolute;
+  bottom: 10px; /* 슬라이드 점을 이미지 하단에 배치 */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slick-dots li {
+  margin: 0 5px;
+}
+
+
+.slick-dots button:before {
+  font-size: 12px;
+  color: white; /* 슬라이드 점의 색상 조정 */
+  opacity: 0.75;
+}
+
+.slick-dots .slick-active button:before {
+  color: white;
+  opacity: 1;
 }
 .product-detail-container {
   display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 20px;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+  margin-left:300px;
+  gap: 100px;
 }
-
-.product-image {
-  flex: 1;
+.product-image{
+  flex:1;
+  width:500px;
+  height:400px;
 }
-
-.product-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-.product img {
-  max-width: 300px; /* 원하는 최대 너비 */
-  max-height: 600px; /* 원하는 최대 높이 */
-  object-fit: cover; /* 이미지의 비율을 유지하면서 크기 조정 */
-}
-
 .product-info {
   flex: 2;
-  display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -102,9 +135,31 @@ header .user-options {
 .product-description p {
   line-height: 1.6;
 }
+  
 .product-comment {
   flex: 1;
 }
+
+.comment-section {
+  margin-top: 20px;
+}
+
+.comments-list {
+  margin-top: 10px;
+}
+
+.comment-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius:0cm;}
+  .label {
+    background-color: #4caf50; /* 배경색 */
+    color: white; /* 텍스트 색상 */
+    padding: 5px 10px; /* 여백 */
+    border-radius: 5px; /* 둥근 모서리 */
+    font-weight: bold; /* 글꼴 두껍게 */
+  }
 
 /* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조절 */
 @media (max-width: 768px) {
@@ -127,7 +182,6 @@ header .user-options {
   }
 }
 
-/* 새로운 스타일 */
 .product {
   display: flex;
   flex-direction: column;
@@ -188,4 +242,30 @@ header .user-options {
 
 .pagination button:hover:not(:disabled) {
   background-color: #0056b3;
+}
+
+.favorite-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.favorite-button .fa-heart {
+  color: #ccc;
+}
+
+.favorite-button .fa-heart.active {
+  color: red;
+}
+
+.favorite-button.favorited .fa-heart {
+  color: red;
+}
+.button-administer{
+  margin-left: 0px;
+margin-top: 300px;
+gap: 0px;
 }
