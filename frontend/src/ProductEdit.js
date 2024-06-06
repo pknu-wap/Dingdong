@@ -53,11 +53,11 @@ const  ProductEdit=({product})=>{
       navigate('/');
     }
   }, [navigate]);
-
+  
   const putEditData = async () => {
     try {
       const token = Cookies.get('authToken');
-      const url = 'http://3.34.122.83:8080/product';
+      const url = `http://3.34.122.83:8080/product/${id}`;
       const formData = new FormData();
       const productData = {
         title: productname,
@@ -97,7 +97,7 @@ const  ProductEdit=({product})=>{
           <Form.Label column lg={1}>
             상품이미지
           </Form.Label>
-          <Col>
+          <Col style={{height:'310px'}}>
             <ImageUpload uploadImgUrls={uploadImgUrls} setUploadImgUrls={setUploadImgUrls} setImageFiles={setImageFiles} /> {/* setImageFiles 전달 */}
           </Col>
         </Row>
@@ -173,9 +173,11 @@ const ImageUpload = ({ uploadImgUrls, setUploadImgUrls, setImageFiles }) => {
 
   return (
     <>
-      {uploadImgUrls.map((url, index) => (
-        <img key={index} src={url} alt="uploaded" style={{ maxHeight: '100px', maxWidth: 'auto', marginRight: '10px' }} />
+   <div className='uploadimg'>
+      {uploadImgUrls.map((url, index) => (        
+        <img key={index} src={url} alt="uploaded" style={{ height:'100%',width: '100%',marginRight:'10px', objectFit:'contain'}} />
       ))}
+      </div>
       <input type="file" accept="image/*" multiple onChange={onchangeImageUpload} />
     </>
   );

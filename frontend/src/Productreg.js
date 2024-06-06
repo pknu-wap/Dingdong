@@ -35,8 +35,8 @@ function Productreg() {
   const [uploadImgUrls, setUploadImgUrls] = useState([]); // 여러 이미지 URL을 저장할 상태
   const [imageFiles, setImageFiles] = useState([]); // 이미지 파일을 저장할 상태 추가
   const [response_reg, setResponse_reg] = useState(null);
-  const [selectedValue, setSelectedValue] = useState("");
-  const [selectedValue2, setSelectedValue2] = useState("");
+  const [selectedValue, setSelectedValue] = useState("강서구");
+  const [selectedValue2, setSelectedValue2] = useState("강서구");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +51,10 @@ function Productreg() {
     try {
       const token = Cookies.get('authToken');
       const url = 'http://3.34.122.83:8080/product';
+      if (selectedValue === selectedValue2) {
+        alert('선택된 두 지역이 동일합니다. 다른 지역을 선택해 주세요.');
+        return; // 함수 실행 중단
+      }
       const formData = new FormData();
       const productData = {
         title: productname,
@@ -90,7 +94,7 @@ function Productreg() {
           <Form.Label column lg={1}>
             상품이미지
           </Form.Label>
-          <Col>
+          <Col style={{height:'310px'}}>
             <ImageUpload uploadImgUrls={uploadImgUrls} setUploadImgUrls={setUploadImgUrls} setImageFiles={setImageFiles} /> {/* setImageFiles 전달 */}
           </Col>
         </Row>
@@ -166,9 +170,12 @@ const ImageUpload = ({ uploadImgUrls, setUploadImgUrls, setImageFiles }) => {
 
   return (
     <>
-      {uploadImgUrls.map((url, index) => (
-        <img key={index} src={url} alt="uploaded" style={{ maxHeight: '100px', maxWidth: 'auto', marginRight: '10px' }} />
+  <div className='uploadimg'>
+      {uploadImgUrls.map((url, index) => (          
+        <img key={index} src={url} alt="uploaded" style={{ height:'100%',width: '100%',marginRight:'10px', objectFit:'contain' }} />
       ))}
+      </div>
+     
       <input type="file" accept="image/*" multiple onChange={onchangeImageUpload} />
     </>
   );

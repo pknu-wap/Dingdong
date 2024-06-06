@@ -40,12 +40,7 @@ header .user-options {
   filter: invert(26%) sepia(99%) saturate(1246%) hue-rotate(92deg) brightness(99%) contrast(106%);
 }
 
-.product_list.hover{
-  background-color: lightgrey;
-}
-.product_list:hover{
-  background-color: lightgrey;
-}
+
 
 .product img{
   width: 300px; /* 원하는 최대 너비 */
@@ -56,7 +51,12 @@ header .user-options {
 .category_click{
 color:#fbdd97;
 }
-
+.uploadimg{
+  display: flex;
+  flex-direction: row;
+  height:300px;
+  width:250px;
+}
 .slider-container {
   position: relative;
   width: 100%; /* 이미지의 가로 크기 조정 */
