@@ -49,6 +49,7 @@ function App() {
       <Route path="/productdetail/:id" element={<ProductDetail product={product}setProduct={setProduct} />}/>
       <Route path="/productEdit/:id" element={<ProductEdit product={product}setProduct={setProduct} />}/>
 
+
      </Routes>
     </div>
   );
