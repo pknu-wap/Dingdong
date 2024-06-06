@@ -101,7 +101,9 @@ const ProductList = ({ product, setProduct }) => {
                     <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
                     <button onClick={() => setPage(page + 1)} disabled={page >= totalPages}>다음</button>
              </div>
+             </div>
         </>
+        
     );
 };
 
