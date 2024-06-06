@@ -16,27 +16,18 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="App-title">{message}</h1>
-      <Routes>
-        <Route
-          path="/"
-          element={<ProductList product={product} setProduct={setProduct} />}
-        />
-        <Route
-          path="/productlist"
-          element={<ProductList product={product} setProduct={setProduct} />}
-        />
-        <Route path="/productreg" element={<Productreg />} />
-        <Route path="/mypage" element={<Mypage />} />
-        <Route
-          path="/productdetail/:id"
-          element={<ProductDetail product={product} setProduct={setProduct} />}
-        />
-        <Route
-          path="/productEdit/:id"
-          element={<ProductEdit product={product} setProduct={setProduct} />}
-        />
-      </Routes>
+     <h1 className="App-title">{message}</h1>
+     <Routes>
+     <Route path="/" element={<ProductList product={product} setProduct={setProduct}/> } />
+     <Route path="/productlist" element={<ProductList product={product}setProduct={setProduct} /> } />
+     <Route path="/productreg" element={<Productreg/>}/>
+     <Route path="/mypage" element={<Mypage/> } />
+      <Route path="/productdetail/:id" element={<ProductDetail product={product}setProduct={setProduct} />}/>
+      <Route path="/productEdit/:id" element={<ProductEdit product={product}setProduct={setProduct} />}/>
+     
+     
+     </Routes>
+   
     </div>
   );
 }

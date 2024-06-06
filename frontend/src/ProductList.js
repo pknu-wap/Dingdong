@@ -97,7 +97,7 @@ const ProductList = ({ product, setProduct }) => {
         <div>
             <ReactGridLayout isDraggable={false} isResizable={false} layout={layout} cols={4} rowHeight={500} width={1400}>
                 {product.map((product) => (
-                    <div key={product.productId} className={`product_list ${product.status === 1 ? 'hover' : ''}`} style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px', cursor: 'pointer' }}>
+                    <div key={product.productId} className="product_list"style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px', cursor: 'pointer' }}>
                         <Product product={product} />
                     </div>
                 ))}
