@@ -111,7 +111,7 @@ useEffect(() => {
   console.log(token);
   if (token) {
     handleLoginSuccess(token);
-  
+    window.history.replaceState({}, document.title, window.location.pathname);
     // URL에서 토큰 제거
   } else {
     const storedToken = Cookies.get('authToken');
