@@ -7,6 +7,7 @@ import ProductList from './ProductList';
 import Mypage from './Mypage';
 import Productreg from './Productreg';
 import ProductDetail from './ProductDetail';
+import ProductEdit from './ProductEdit';
 
 
 function App() {
@@ -45,7 +46,10 @@ function App() {
      <Route path="/productlist" element={<ProductList product={product}setProduct={setProduct} /> } />
      <Route path="/productreg" element={<Productreg/>}/>
      <Route path="/mypage" element={<Mypage/> } />
-     <Route path="/productdetail/:id" element={<ProductDetail product={product}setProduct={setProduct} />}/>
+      <Route path="/productdetail/:id" element={<ProductDetail product={product}setProduct={setProduct} />}/>
+      <Route path="/productEdit/:id" element={<ProductEdit product={product}setProduct={setProduct} />}/>
+
+
      </Routes>
     </div>
   );

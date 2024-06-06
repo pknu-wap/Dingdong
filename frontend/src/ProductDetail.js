@@ -116,6 +116,9 @@ const statusChangeHandler= async()=>{
   }
 
 }
+const editClickHandler=()=>{
+  navigate(`/productedit/${id}`)
+}
     return( 
         <>
         <Header/>
@@ -136,6 +139,7 @@ const statusChangeHandler= async()=>{
                 <p className="product-location">거래지역: {detailproduct.locations[0]?.location},{detailproduct.locations[1]?.location}</p>
                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit"onClick={statusChangeHandler} style={{fontSize:'22px', width:'127.6px',height:'51.6px'}}>{regStatus==1?'판매완료':'판매중'} </button>
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit" style={{fontSize:'22px'}}>  <FavoriteButton id={id} totalLike={totalLike} setTotalLike={setTotalLike}/>찜하기+<span style={{color:'gray'}}>{totalLike}</span>  </button>
+            <button className="btn btn-outline-success my-2 my-sm-0" type="submit"onClick={editClickHandler} style={{fontSize:'22px', width:'127.6px',height:'51.6px'}}> 상품수정 </button>
             </div>
             
         </div> 

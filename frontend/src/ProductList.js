@@ -4,6 +4,7 @@ import ReactGridLayout from 'react-grid-layout';
 import "./App.css";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
+import Cookies from 'js-cookie';
 
 // 제품 컴포넌트
 const Product = ({ product }) => {
@@ -67,7 +68,11 @@ const ProductList = ({ product, setProduct }) => {
         };
 
         fetchProducts();
-    }, [page, setProduct]);
+      
+        const token = Cookies.get('authToken');
+      console.log('Token:', token);
+    }, [page,setProduct]);
+
 
     if (loading) {
         return <div>Loading...</div>;
