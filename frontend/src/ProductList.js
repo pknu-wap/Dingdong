@@ -28,21 +28,23 @@ const Product = ({ product }) => {
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;  //fromattedDate는 변환된 한국시간
     
     console.log(formattedDate); // 예: "2024-06-03 14:38"
-
+    console.log(product.locations);
+    
     return (
         <div className="product" onClick={handleProductClick} style={{ cursor: 'pointer' }}>
             <img src={product.images[0]?.image} alt={product.title} />
             <div className="info">
                 <h3>{product.title}</h3>
                 <p>{product.price}원</p>
+                <p>{product.userName}</p>
+                <p>{product.liked}명이 찜함</p>
                 <p>{product.locations.map(loc => loc.location).join(', ')}</p>
                 <p>{formattedDate}</p>  
-                {product.status==1 ? <div className="label">판매완료</div>:null}   
+                {product.status == 1 ? <div className="label">판매완료</div> : null}   
             </div>                     
         </div>                              //product.status가 1이면 판매완료된 상품이므로 판매완료라벨 표시
     );
 };
-
 
 // 그리드 레이아웃 컴포넌트
 const ProductList = ({ product, setProduct }) => {
@@ -51,14 +53,13 @@ const ProductList = ({ product, setProduct }) => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
                 const response = await axios.get(`http://3.34.122.83:8080/product/list/recent?page=${page}`);
                 setProduct(response.data.productsResponse);
-                setTotalPages(response.data.totalPages); // assuming the API response includes totalPages
+                setTotalPages(response.data.pageCount); // 페이지 수 설정
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -70,9 +71,8 @@ const ProductList = ({ product, setProduct }) => {
         fetchProducts();
       
         const token = Cookies.get('authToken');
-      console.log('Token:', token);
-    }, [page,setProduct]);
-
+        console.log('Token:', token);
+    }, [page, setProduct]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -93,22 +93,21 @@ const ProductList = ({ product, setProduct }) => {
 
     return (
         <>
-        <Header/>
-        <div>
-            <ReactGridLayout isDraggable={false} isResizable={false} layout={layout} cols={4} rowHeight={500} width={1400}>
-                {product.map((product) => (
-                    <div key={product.productId} className="product_list"style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px', cursor: 'pointer' }}>
-                        <Product product={product} />
-                    </div>
-                ))}
-            </ReactGridLayout>
-             <div className="pagination">
+            <Header />
+            <div>
+                <ReactGridLayout isDraggable={false} isResizable={false} layout={layout} cols={4} rowHeight={600} width={1400}>
+                    {product.map((product) => (
+                        <div key={product.productId} className="product_list" style={{ display: 'flex', justifyContent: 'center', marginLeft: '30px', alignItems: 'center', padding: '10px', cursor: 'pointer' }}>
+                            <Product product={product} />
+                        </div>
+                    ))}
+                </ReactGridLayout>
+                <div className="pagination">
                     <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
                     <button onClick={() => setPage(page + 1)} disabled={page >= totalPages}>다음</button>
-             </div>
-             </div>
+                </div>
+            </div>
         </>
-        
     );
 };
 

@@ -23,34 +23,37 @@ const Header = () => {
   const [category2, setCategory2] = useState(false);
   const [category3, setCategory3] = useState(false);
   let navigate = useNavigate();
+
   const handleMapIconClick = () => {
     setShowModal(true); // 모달 열기
   };
+
   const handleRegionClick = (region) => {
-    if (selectedRegion.length < 2 || selectedRegion.includes(region)) {
-      setSelectedRegion((prev) => {
-        if (prev.includes(region)) {
-          return prev.filter((r) => r !== region);
+    setSelectedRegion((prev) => {
+      if (prev.includes(region)) {
+        return prev.filter((r) => r !== region);
+      } else {
+        if (prev.length < 2) {
+          return [...prev, region];
         } else {
-          if (prev.length < 2) {
-            return [...prev, region];
-          } else {
-            return prev;
-          }
+          return prev;
         }
-      });
-    }
-    console.log("선택된 지역:", selectedRegion);
+      }
+    });
   };
 
-  const fetchFilteredProducts = async () => {
+  useEffect(() => {
+    console.log("선택된 지역:", selectedRegion);
+  }, [selectedRegion]);
+
+  const fetchFilteredProducts = async (regions) => {
     try {
       const response = await axios.get("/GET/product/search/region", {
         params: {
           page: 1,
           title: "",
-          location1: selectedRegion[0] || "",
-          location2: selectedRegion[1] || "",
+          location1: regions[0] || "",
+          location2: regions[1] || "",
         },
       });
       console.log("필터링된 상품:", response.data);
@@ -61,7 +64,7 @@ const Header = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    fetchFilteredProducts(); // 모달이 닫힐 때 API 요청을 보냅니다.
+    fetchFilteredProducts(selectedRegion); // 모달이 닫힐 때 현재 선택된 지역을 인자로 전달
   };
 
   useEffect(() => {
@@ -73,32 +76,35 @@ const Header = () => {
       navigate("/mypage");
     }
   }, [category1, category2, category3, navigate]);
+
   const Category1Click = () => {
     setCategory1(true);
     setCategory2(false);
     setCategory3(false);
   };
+
   const Category2Click = () => {
     setCategory1(false);
     setCategory2(true);
     setCategory3(false);
   };
+
   const Category3Click = () => {
     setCategory1(false);
     setCategory2(false);
     setCategory3(true);
   };
+
   const handleLogin = () => {
     const redirectUri = encodeURIComponent(window.location.href);
     console.log(redirectUri);
     window.location.href = `http://3.34.122.83:8080/oauth2/authorization/kakao?redirect_uri=${redirectUri}`;
   };
+
   const handleLogout = () => {
     Cookies.remove("authToken");
     Cookies.remove("userName");
-
     setUserName(null);
-
     navigate("/");
   };
 
@@ -266,6 +272,7 @@ const Header = () => {
           </Navbar.Brand>
         </Container>
       </Navbar>
+
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>지역 선택</Modal.Title>
