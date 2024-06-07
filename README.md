@@ -37,11 +37,17 @@
     <td align="center"><a href="https://github.com/Hun0906"><img src="https://avatars.githubusercontent.com/u/134472292?v=4" width="100px;" alt=""/>
     <td align="center"><a href="https://github.com/dhlee777"><img src="https://avatars.githubusercontent.com/u/117627976?v=4" width="100px;" alt=""/>
   </tr>
-    <tr>
-    <td align="center">BE<br><a href="https://github.com/SHSong99" title="Code">SHSong99</a></td>
-    <td align="center">BE<br><a href="https://github.com/sihyeon-an" title="Code">sihyeon-an</a></td>
-    <td align="center">FE<br><a href="https://github.com/Hun0906" title="Code">Hun0906</a></td>
-    <td align="center">FE<br><a href="https://github.com/dhlee777" title="Code">dhlee777</a></td>
+  <tr align="center">
+    <td>BE</td>
+    <td>BE</td>
+    <td>FE</td>
+    <td>FE</td>
+  </tr>
+  <tr>
+    <td align="center">송성현<br><a href="https://github.com/SHSong99" title="Code">SHSong99</a></td>
+    <td align="center">안시현<br><a href="https://github.com/sihyeon-an" title="Code">sihyeon-an</a></td>
+    <td align="center">이동훈<br><a href="https://github.com/Hun0906" title="Code">Hun0906</a></td>
+    <td align="center">이동현<br><a href="https://github.com/dhlee777" title="Code">dhlee777</a></td>
   </tr>
 </table>
 </div>
