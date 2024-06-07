@@ -34,14 +34,18 @@ const Product = ({ product }) => {
         <div className="product" onClick={handleProductClick} style={{ cursor: 'pointer' }}>
             <img src={product.images[0]?.image} alt={product.title} />
             <div className="info">
-                <h3>{product.title}</h3>
-                <p>{product.price}원</p>
-                <p>{product.userName}</p>
-                <p>{product.liked}명이 찜함</p>
-                <p>{product.locations.map(loc => loc.location).join(', ')}</p>
-                <p>{formattedDate}</p>  
-                {product.status == 1 ? <div className="label">판매완료</div> : null}   
-            </div>                     
+            <h3>{product.title}</h3>
+            <p>{product.price}원</p>
+            <p>{product.userName}</p>
+            <p>{product.locations.map(loc => loc.location).join(', ')}</p>
+            <div className="info-footer">
+                <p>{formattedDate}</p>
+                <i className={'fas fa-heart'}></i>
+                <p>{product.liked}</p>
+            </div>
+            {product.status == 1 ? <div className="label">판매완료</div> : null}
+        </div>
+               
         </div>                              //product.status가 1이면 판매완료된 상품이므로 판매완료라벨 표시
     );
 };

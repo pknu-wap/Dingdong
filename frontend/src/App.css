@@ -229,6 +229,18 @@ color:#fbdd97;
   color: #555;
 }
 
+.info-footer {
+  display: flex;
+  align-items: center;
+}
+
+.info-footer p{
+  margin-right : 30px;
+}
+.info-footer i {
+  margin-right: 5px; /* 각 요소 간의 간격을 조정합니다 */
+  color : red;
+}
 .pagination {
   display: flex;
   justify-content: center;
