@@ -22,11 +22,10 @@ const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,sel
   const [category2, setCategory2] = useState(false);
   const [category3, setCategory3] = useState(false);
   let navigate = useNavigate();
+
   const handleMapIconClick = () => {
     setShowModal(true); // 모달 열기
   };
-  
-
   const handleRegionClick = (region) => {
     setSelectedRegion((prev) => {
       if (prev.includes(region)) {
@@ -40,11 +39,11 @@ const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,sel
       }
     });
   };
-  
+
   useEffect(() => {
     console.log("선택된 지역:", selectedRegion);
   }, [selectedRegion]);
-  
+
   const fetchFilteredProducts = async (regions) => {
     try {
       const response = await axios.get("/GET/product/search/region", {
@@ -75,32 +74,35 @@ const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,sel
       navigate("/mypage");
     }
   }, [category1, category2, category3, navigate]);
+
   const Category1Click = () => {
     setCategory1(true);
     setCategory2(false);
     setCategory3(false);
   };
+
   const Category2Click = () => {
     setCategory1(false);
     setCategory2(true);
     setCategory3(false);
   };
+
   const Category3Click = () => {
     setCategory1(false);
     setCategory2(false);
     setCategory3(true);
   };
+
   const handleLogin = () => {
     const redirectUri = encodeURIComponent(window.location.href);
     console.log(redirectUri);
     window.location.href = `http://3.34.122.83:8080/oauth2/authorization/kakao?redirect_uri=${redirectUri}`;
   };
+
   const handleLogout = () => {
     Cookies.remove("authToken");
     Cookies.remove("userName");
-
     setUserName(null);
-
     navigate("/");
   };
 
@@ -159,17 +161,19 @@ const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,sel
     <div>
       <Container fluid className="header-size">
         <Row>
-          <Col className="col-3">
+          <Col className="col-3" onClick={Category1Click}>
             <img
               src={Logo}
               alt="logo"
-              style={{ width: "40px", height: "auto", marginBottom: "10px" }}
+              style={{ width: "50px", height: "auto", margin: "0px 10px 20px 0px"}}
             />
             <span
               style={{
-                fontSize: "30px",
+                fontFamily: 'Ownglyph_meetme-Rg',
+                fontSize: "50px",
                 fontWeight: "bold",
                 textAlign: "center",
+                letterSpacing: "2px"
               }}
             >
               딩동
@@ -216,6 +220,9 @@ const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,sel
                   className="btn btn-outline-success my-2 my-sm-0"
                   type="submit"
                   onClick={handleLogout}
+                  style={{
+                    marginLeft: "10px"
+                  }}
                 >
                   로그아웃
                 </button>
@@ -277,6 +284,7 @@ const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,sel
           </Navbar.Brand>
         </Container>
       </Navbar>
+
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>지역 선택</Modal.Title>
