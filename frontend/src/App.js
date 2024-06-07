@@ -15,7 +15,7 @@ function App() {
   const[searchContent,setSearchContent]=useState('');
   const [page, setPage] = useState(1);
   const [searchButton,setSearchButton]=useState(0);
-  const [selectedRegion, setSelectedRegion] = useState(['','']); // 선택된 지역을 관리하는 상태값
+  const [selectedRegion, setSelectedRegion] = useState([]); // 선택된 지역을 관리하는 상태값
   const hideHeaderPaths = ['/productdetail'];
   const shouldHideHeader = hideHeaderPaths.some(path => location.pathname.startsWith(path));
   // message 초기값을 ""으로 설정.
