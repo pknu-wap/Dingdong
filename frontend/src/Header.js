@@ -160,13 +160,15 @@ const Header = () => {
             <img
               src={Logo}
               alt="logo"
-              style={{ width: "40px", height: "auto", marginBottom: "10px" }}
+              style={{ width: "50px", height: "auto", margin: "0px 10px 20px 0px"}}
             />
             <span
               style={{
-                fontSize: "30px",
+                fontFamily: 'Ownglyph_meetme-Rg',
+                fontSize: "50px",
                 fontWeight: "bold",
                 textAlign: "center",
+                letterSpacing: "2px"
               }}
             >
               딩동
