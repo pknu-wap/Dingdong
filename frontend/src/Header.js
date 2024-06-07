@@ -14,10 +14,9 @@ import mapIcon from "./dummy/지도로고.png";
 import kakaoicon from "./dummy/카카오로그인.png";
 import "./App.css";
 
-const Header = () => {
+const Header = ({searchContent,setSearchContent,searchButton,setSearchButton,selectedRegion,setSelectedRegion}) => {
   const [showModal, setShowModal] = useState(false); // 모달 상태를 관리하기 위한 상태값
   const [showLogin, setShowLogin] = useState(false);
-  const [selectedRegion, setSelectedRegion] = useState([]); // 선택된 지역을 관리하는 상태값
   const [userName, setUserName] = useState(null);
   const [category1, setCategory1] = useState(false);
   const [category2, setCategory2] = useState(false);
@@ -27,7 +26,6 @@ const Header = () => {
   const handleMapIconClick = () => {
     setShowModal(true); // 모달 열기
   };
-
   const handleRegionClick = (region) => {
     setSelectedRegion((prev) => {
       if (prev.includes(region)) {
@@ -61,7 +59,7 @@ const Header = () => {
       console.error("API 요청 에러:", error);
     }
   };
-
+  
   const handleCloseModal = () => {
     setShowModal(false);
     fetchFilteredProducts(selectedRegion); // 모달이 닫힐 때 현재 선택된 지역을 인자로 전달
@@ -133,7 +131,7 @@ const Header = () => {
     Cookies.set("authToken", token, { expires: 7 }); // 쿠키에 7일간 저장
     fetchUserInfo(token);
   };
-
+ 
   const fetchUserInfo = (token) => {
     fetch("http://3.34.122.83:8080/user/me", {
       method: "GET",
@@ -151,7 +149,14 @@ const Header = () => {
         console.error("사용자 정보를 가져오는 동안 에러 발생:", error)
       );
   };
-
+ const searchButtonClickHandler=()=>{
+        setSearchButton(1);
+        /*try{
+            const response=axios.get(`http://3.34.122.83:8080/product/search/region?page=${page}&title=${searchContent}&location1=${selectedRegion[0]}&location2=${selectedRegion[1]}}`)
+        }catch(error){
+          console.error(error);
+        }*/
+ }
   return (
     <div>
       <Container fluid className="header-size">
@@ -181,11 +186,13 @@ const Header = () => {
               type="search"
               placeholder="검색어를 입력하세요"
               aria-label="Search"
+              value={searchContent}
+              onChange={(e) => { e.preventDefault(); setSearchContent(e.target.value); }}
             />
           </Col>
 
           <Col className="col-1">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={searchButtonClickHandler}>
               Search
             </button>
           </Col>

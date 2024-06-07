@@ -118,7 +118,7 @@ const MyPage = () => {
 
   return (
     <>
-      <Header />
+      
       <Container fluid style={{ marginTop: "30px" }}>
         <Row>
           <Col>

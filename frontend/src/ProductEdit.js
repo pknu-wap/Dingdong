@@ -90,7 +90,7 @@ const  ProductEdit=({product})=>{
 
   return (
     <>
-      <Header />
+     
       <div style={{ fontSize: '25px', fontWeight: 'bold', borderBottom: '1px solid #000', marginLeft: '30px', marginTop: '30px' }}>상품수정</div>
       <Container fluid style={{ marginTop: '20px', marginLeft: '20px', fontSize: '18px' }}>
         <Row>

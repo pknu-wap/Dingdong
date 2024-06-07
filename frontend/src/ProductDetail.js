@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useEffect}from "react";
 import { useParams } from 'react-router-dom'
 import Header from './Header'
 import { useNavigate } from 'react-router-dom';
@@ -73,11 +73,28 @@ const ImageSlider = ({imageDummy}) => {
     );
   };
 
-const ProductDetail=({product,setProduct})=>{                     //상품상세페이지 컴포넌트
-let {id}=useParams();                           //현재페이지 url의 id찾기
-let detailproduct=product.find(function(x){           //detailproduct 는 현재페이지의 상품id를 가진 객체
-return x.productId==id;
-});
+const ProductDetail=({searchContent, setSearchContent, searchButton,setSearchButton, selectedRegion, setSelectedRegion})=>{                     //상품상세페이지 컴포넌트
+let {id}=useParams(); 
+const [detailproduct,setDetailProduct]=useState([]);
+useEffect(() => {
+  const fetchProducts = async () => {
+      try {
+          
+          const response = await axios.get(`http://3.34.122.83:8080/product/${id}`);
+          setDetailProduct(response.data);
+          console.log("rrr");
+          console.log(detailproduct);
+      } catch (error) {
+          console.error('Error fetching products:', error);
+         
+      }
+  };
+
+  fetchProducts();
+
+}, [setDetailProduct]);
+console.log(id);                          //현재페이지 url의 id찾기
+console.log(detailproduct.id);
 const navigate=useNavigate();
 const [totalLike,setTotalLike]=useState(detailproduct.liked);
 const [regStatus,setRegStatus]=useState(detailproduct.status);
@@ -121,7 +138,7 @@ const editClickHandler=()=>{
 }
     return( 
         <>
-        <Header/>
+        <Header searchContent={searchContent} setSearchContent={setSearchContent} searchButton={searchButton}setSearchButton={setSearchButton} selectedRegion={selectedRegion} setSelectedRegion={setSelectedRegion}/>
         <div className="product-detail-container">
             <div className="product-image">
                <ImageSlider imageDummy={detailproduct.images}/>
