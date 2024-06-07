@@ -156,7 +156,7 @@ const Header = () => {
     <div>
       <Container fluid className="header-size">
         <Row>
-          <Col className="col-3">
+          <Col className="col-3" onClick={Category1Click}>
             <img
               src={Logo}
               alt="logo"
