@@ -38,6 +38,7 @@ const Product = ({ product }) => {
       <div className="info">
         <h3>{product.title}</h3>
         <p>{product.price}원</p>
+        <p>{product.userName}</p>
         <p>{product.locations.map((loc) => loc.location).join(", ")}</p>
         <p>{formattedDate}</p>
         {product.status == 1 ? <div className="label">판매완료</div> : null}
