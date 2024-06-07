@@ -213,6 +213,9 @@ const Header = () => {
                   className="btn btn-outline-success my-2 my-sm-0"
                   type="submit"
                   onClick={handleLogout}
+                  style={{
+                    marginLeft: "10px"
+                  }}
                 >
                   로그아웃
                 </button>
