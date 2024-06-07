@@ -75,7 +75,7 @@ public class ProductController {
 
         if (location1 != null && location2 != null) {
             return searchTwoRegionProducts(title, location1, location2, page);
-        } else if (location1 != null) {
+        } else if (location1 != null || location2 != null) {
             return searchOneRegionProducts(title, location1, page);
         } else {
             // 에러
